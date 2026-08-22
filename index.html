@@ -2,8 +2,19 @@
 <html lang="zh-HK">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>HKJC 足球賽果半場篩選追蹤器</title>
+
+  <!-- PWA & Mobile App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icons/soccer.svg">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="足球賽果">
+  <meta name="theme-color" content="#0b1120">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -90,6 +101,20 @@
     .btn-primary { background-color: #2563eb; border-color: #3b82f6; }
     .btn-primary:hover { background-color: #1d4ed8; }
     .btn-success { background-color: #059669; border-color: #10b981; }
+    .btn-notify-active { background-color: #059669; border-color: #10b981; color: #fff; }
+
+    /* PWA Install Banner */
+    .pwa-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      border: 1px solid var(--accent-blue);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+    }
 
     .stats-grid {
       display: grid;
@@ -385,12 +410,29 @@
 <body>
 
 <div class="container">
+  <!-- PWA Install Banner -->
+  <div id="pwaBanner" class="pwa-banner">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 1.4rem;">⚽</span>
+      <div>
+        <div style="font-weight: 700; color: #fff;">加入至手機主畫面</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">一鍵加入主螢幕，體驗原生 App 般的全螢幕操作</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 6px;">
+      <button class="btn btn-primary" onclick="triggerPWAInstall()">📲 立即加入</button>
+      <button class="btn" onclick="dismissPWABanner()">✕</button>
+    </div>
+  </div>
+
   <header>
     <div class="title-group">
       <h1>⚽ 賽果追蹤器</h1>
       <p>支援今天、昨天、上星期、上個月、56日歷史紀錄與半場 1:0 / 2:0 / 0:1 / 0:2 即時過濾</p>
     </div>
     <div class="header-actions">
+      <button id="btnNotify" class="btn" onclick="toggleNotifications()">🔔 開啟通知</button>
+      <button class="btn" onclick="testNotification()">⚡ 測試通知</button>
       <button class="btn" onclick="openAddModal()">➕ 新增賽事</button>
       <button class="btn" onclick="exportCSV()">📥 匯出 CSV</button>
       <button class="btn btn-primary" onclick="resetToDefaultData()">🔄 重置 56 日庫</button>
@@ -480,11 +522,11 @@
   </div>
 
   <footer>
-    <p>HKJC Style Match Results Tracker &copy; 2026</p>
+    <p>HKJC Style Match Results Tracker &copy; 2026 | PWA Ready</p>
   </footer>
 </div>
 
-<!-- Modal -->
+<!-- Modal: Add Match -->
 <div id="addMatchModal" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
@@ -517,6 +559,76 @@
 </div>
 
 <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('pwaBanner').style.display = 'flex';
+  });
+
+  function triggerPWAInstall() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        document.getElementById('pwaBanner').style.display = 'none';
+      });
+    } else {
+      alert('iPhone 用戶請點擊 Safari 底部的「分享」按鈕 ➔ 選擇「加入至主畫面」即可安裝！');
+    }
+  }
+
+  function dismissPWABanner() {
+    document.getElementById('pwaBanner').style.display = 'none';
+  }
+
+  // Notifications
+  let notifyEnabled = localStorage.getItem('hkjc_notify') === 'true';
+
+  function updateNotifyBtn() {
+    const btn = document.getElementById('btnNotify');
+    if (Notification.permission === 'granted' && notifyEnabled) {
+      btn.textContent = '🔔 已開啟通知';
+      btn.classList.add('btn-notify-active');
+    } else {
+      btn.textContent = '🔔 開啟通知';
+      btn.classList.remove('btn-notify-active');
+    }
+  }
+
+  async function toggleNotifications() {
+    if (!('Notification' in window)) {
+      alert('您的瀏覽器不支援通知功能。');
+      return;
+    }
+    if (Notification.permission !== 'granted') {
+      const p = await Notification.requestPermission();
+      if (p === 'granted') {
+        notifyEnabled = true;
+        localStorage.setItem('hkjc_notify', 'true');
+        new Notification('⚽ 賽果通知已開啟', { body: '有符合半場 1:0/2:0/0:1/0:2 賽果時將即時推播。' });
+      }
+    } else {
+      notifyEnabled = !notifyEnabled;
+      localStorage.setItem('hkjc_notify', notifyEnabled ? 'true' : 'false');
+    }
+    updateNotifyBtn();
+  }
+
+  function testNotification() {
+    if (Notification.permission !== 'granted') {
+      toggleNotifications();
+      return;
+    }
+    new Notification('⚽ [測試通知] 索察 1:0 甘岡 (完場)', {
+      body: '半場比數：1:0 | 全場完場：1:0 (符合篩選條件)'
+    });
+  }
+
   const EMBEDDED_DATASET = [
     { dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國乙組聯賽", home: "索察", away: "甘岡", ftScore: "1:0", htScore: "1:0" },
     { dateText: "22/08/2026", dateISO: "2026-08-22", league: "德國盃", home: "羅斯托克", away: "史特加", ftScore: "0:4", htScore: "0:2" },
@@ -535,14 +647,11 @@
     { dateText: "21/08/2026", dateISO: "2026-08-21", league: "歐洲協會聯賽", home: "國際杜古", away: "哥本哈根", ftScore: "0:0", htScore: "0:0" },
     { dateText: "20/08/2026", dateISO: "2026-08-20", league: "沙特超級聯賽", home: "艾拿積馬", away: "伊蒂哈德", ftScore: "0:3", htScore: "0:2" },
     { dateText: "20/08/2026", dateISO: "2026-08-20", league: "卡塔爾星級聯賽", home: "艾華卡拉", away: "卡塔爾SC", ftScore: "2:1", htScore: "1:0" },
-    { dateText: "20/08/2026", dateISO: "2026-08-20", league: "美國職業聯賽", home: "洛杉磯銀河", away: "聖荷西地震", ftScore: "3:1", htScore: "2:0" },
     { dateText: "18/08/2026", dateISO: "2026-08-18", league: "英格蘭超級聯賽", home: "曼城", away: "車路士", ftScore: "2:0", htScore: "1:0" },
     { dateText: "18/08/2026", dateISO: "2026-08-18", league: "英格蘭超級聯賽", home: "利物浦", away: "般尼茅夫", ftScore: "4:1", htScore: "2:0" },
     { dateText: "17/08/2026", dateISO: "2026-08-17", league: "西班牙甲組聯賽", home: "皇家馬德里", away: "維拉利爾", ftScore: "3:0", htScore: "1:0" },
-    { dateText: "16/08/2026", dateISO: "2026-08-16", league: "西班牙甲組聯賽", home: "巴塞隆拿", away: "西維爾", ftScore: "2:1", htScore: "0:1" },
     { dateText: "15/08/2026", dateISO: "2026-08-15", league: "德國甲組聯賽", home: "拜仁慕尼黑", away: "史特加", ftScore: "3:1", htScore: "2:0" },
     { dateText: "12/08/2026", dateISO: "2026-08-12", league: "歐洲聯賽冠軍盃", home: "些路迪", away: "卡拉伯克", ftScore: "2:0", htScore: "1:0" },
-    { dateText: "11/08/2026", dateISO: "2026-08-11", league: "歐洲聯賽冠軍盃", home: "加拉塔沙雷", away: "薩爾斯堡", ftScore: "1:2", htScore: "0:2" },
     { dateText: "08/08/2026", dateISO: "2026-08-08", league: "日本職業聯賽", home: "橫濱水手", away: "川崎前鋒", ftScore: "1:1", htScore: "1:0" },
     { dateText: "07/08/2026", dateISO: "2026-08-07", league: "日本職業聯賽", home: "神戶勝利船", away: "浦和紅鑽", ftScore: "2:0", htScore: "2:0" },
     { dateText: "02/08/2026", dateISO: "2026-08-02", league: "法國甲組聯賽", home: "巴黎聖日耳門", away: "里昂", ftScore: "4:1", htScore: "2:0" },
@@ -563,10 +672,15 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initFilters();
+    updateNotifyBtn();
     loadInitialData();
 
     document.getElementById('searchInput').addEventListener('input', () => renderMatches());
     document.getElementById('leagueSelect').addEventListener('change', () => renderMatches());
+
+    if (window.location.protocol.startsWith('http')) {
+      setInterval(fetchOnlineData, 180000);
+    }
   });
 
   function loadInitialData() {
@@ -578,6 +692,30 @@
     }
     populateLeagueDropdown();
     renderMatches();
+
+    if (window.location.protocol.startsWith('http')) {
+      fetchOnlineData();
+    }
+  }
+
+  function fetchOnlineData() {
+    fetch('data/matches.json?t=' + Date.now())
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          const oldLen = matchesData.length;
+          matchesData = data;
+          populateLeagueDropdown();
+          renderMatches();
+          if (data.length > oldLen && oldLen > 0) {
+            const m = data[0];
+            if (['1:0','2:0','0:1','0:2'].includes(m.htScore.replace(/\\s+/g,''))) {
+              new Notification(`⚽ 完場更新: ${m.home} ${m.ftScore} ${m.away}`, { body: `半場比數：${m.htScore} (${m.league})` });
+            }
+          }
+        }
+      })
+      .catch(() => {});
   }
 
   function initFilters() {
@@ -701,7 +839,7 @@
   }
 
   function checkHTCriteria(ht) {
-    const clean = ht.replace(/\s+/g, '');
+    const clean = ht.replace(/\\s+/g, '');
     if (currentHTFilter === 'all') return true;
     if (currentHTFilter === 'combo') return ['1:0', '2:0', '0:1', '0:2'].includes(clean);
     if (currentHTFilter === '1-0') return clean === '1:0';
@@ -746,7 +884,7 @@
     emptyState.style.display = 'none';
 
     listContainer.innerHTML = filtered.map(m => {
-      const isTarget = ['1:0', '2:0', '0:1', '0:2'].includes(m.htScore.replace(/\s+/g, ''));
+      const isTarget = ['1:0', '2:0', '0:1', '0:2'].includes(m.htScore.replace(/\\s+/g, ''));
       return `
         <div class="hkjc-item ${isTarget ? 'matched-ht' : ''}">
           <div class="item-header">
@@ -829,9 +967,9 @@
 
   function exportCSV() {
     const filtered = getFilteredMatches();
-    let csv = '\uFEFF日期,聯賽,主隊,客隊,全場比數,半場比數\n';
+    let csv = '\\uFEFF日期,聯賽,主隊,客隊,全場比數,半場比數\\n';
     filtered.forEach(m => {
-      csv += `"${m.dateText}","${m.league}","${m.home}","${m.away}","${m.ftScore}","${m.htScore}"\n`;
+      csv += `"${m.dateText}","${m.league}","${m.home}","${m.away}","${m.ftScore}","${m.htScore}"\\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
