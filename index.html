@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>⚽ HKJC 足球賽果半場篩選追蹤器</title>
 
-  <!-- PWA & Mobile App Meta Tags (Soccer Emoji Icon) -->
+  <!-- PWA & Mobile App Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icons/soccer.svg">
   <link rel="apple-touch-icon" href="icons/soccer.svg">
@@ -37,113 +37,160 @@
       background-color: var(--bg-primary);
       color: var(--text-main);
       min-height: 100vh;
-      line-height: 1.4;
-      padding-bottom: 40px;
+      line-height: 1.5;
+      padding: 16px;
       -webkit-tap-highlight-color: transparent;
     }
 
     .container {
-      max-width: 680px;
+      max-width: 800px;
       margin: 0 auto;
-      background-color: var(--bg-primary);
-      box-shadow: 0 0 40px rgba(0,0,0,0.5);
-      min-height: 100vh;
     }
 
-    /* HKJC Top App Header */
+    /* Modern App Header */
     .app-header {
-      background: linear-gradient(180deg, #059669 0%, #047857 100%);
-      color: #fff;
-      padding: 12px 16px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .header-back {
-      font-size: 0.92rem;
-      font-weight: 600;
-      cursor: pointer;
+    .header-title-group h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
       display: flex;
       align-items: center;
-      gap: 4px;
-      background: rgba(0,0,0,0.15);
-      padding: 4px 8px;
-      border-radius: 6px;
+      gap: 8px;
     }
 
-    .header-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-align: center;
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding: 0 6px;
-    }
-
-    .header-actions-top { display: flex; gap: 6px; }
-
-    .btn-icon {
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.25);
-      color: #fff;
-      border-radius: 6px;
-      padding: 5px 9px;
+    .header-title-group p {
       font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      background-color: var(--bg-secondary);
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       transition: all 0.2s;
     }
 
-    .btn-icon:hover { background: rgba(255,255,255,0.2); }
+    .btn:hover {
+      background-color: #334155;
+      border-color: #475569;
+    }
 
-    /* Filters Section */
-    .filter-section {
+    .btn-green {
+      background-color: #059669;
+      border-color: #10b981;
+      color: #fff;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
       background-color: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
       padding: 12px 16px;
+    }
+
+    .stat-label {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 2px;
+    }
+
+    .stat-val.highlight {
+      color: var(--accent-green);
+    }
+
+    /* Filter Panel */
+    .filter-panel {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .filter-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
-      overflow-x: auto;
-      scrollbar-width: none;
       align-items: center;
     }
-    .filter-row::-webkit-scrollbar { display: none; }
 
-    .filter-label-tag {
-      font-size: 0.76rem;
+    .filter-label {
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--text-muted);
-      min-width: 48px;
+      min-width: 50px;
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .pill {
-      flex-shrink: 0;
       background-color: #0f172a;
       border: 1px solid var(--border-color);
       color: var(--text-muted);
       padding: 5px 12px;
-      border-radius: 16px;
+      border-radius: 18px;
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease-in-out;
     }
 
-    .pill:hover { border-color: #64748b; color: #fff; }
+    .pill:hover {
+      border-color: #64748b;
+      color: #fff;
+    }
 
     .pill.active {
       background-color: var(--accent-green) !important;
@@ -163,11 +210,12 @@
     .search-row {
       display: flex;
       gap: 8px;
-      align-items: center;
+      flex-wrap: wrap;
     }
 
     .search-input {
       flex: 1;
+      min-width: 180px;
       background-color: #0f172a;
       border: 1px solid var(--border-color);
       color: #fff;
@@ -177,7 +225,9 @@
       outline: none;
     }
 
-    .search-input:focus { border-color: var(--accent-blue); }
+    .search-input:focus {
+      border-color: var(--accent-blue);
+    }
 
     .date-input {
       background-color: #0f172a;
@@ -189,67 +239,110 @@
       outline: none;
     }
 
-    /* Summary Bar */
-    .summary-bar {
+    /* List Results */
+    .view-toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
-      font-size: 0.82rem;
+      margin-bottom: 10px;
+      padding: 0 4px;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      background-color: #0f172a;
-      border-bottom: 1px solid var(--border-color);
     }
 
-    .summary-bar strong { font-weight: 700; }
+    .view-toolbar strong {
+      color: var(--accent-green);
+    }
 
-    /* HKJC Match List */
-    .match-list { display: flex; flex-direction: column; }
+    .match-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-    .match-item {
+    .match-card {
       background-color: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-color);
-      padding: 14px 16px;
-      position: relative;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 18px;
       cursor: pointer;
-      transition: background-color 0.15s;
+      transition: all 0.15s ease-in-out;
+      position: relative;
     }
 
-    .match-item:hover { background-color: #243247; }
-    .match-item:active { background-color: #1e293b; }
+    .match-card:hover {
+      background-color: #243247;
+      border-color: #475569;
+      transform: translateY(-1px);
+    }
 
-    .match-item.matched-ht {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.12) 0%, rgba(30, 41, 59, 1) 100%);
+    .match-card.matched-ht {
       border-left: 4px solid var(--accent-green);
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(30, 41, 59, 1) 100%);
     }
 
-    /* Row 1: Date & FB Code (Left) | League (Right) */
-    .row-meta {
+    .card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.82rem;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    .meta-date-code { font-weight: 700; color: #cbd5e1; letter-spacing: 0.5px; }
-    .meta-league { font-weight: 600; color: #94a3b8; }
+    .card-date-code {
+      font-weight: 700;
+      color: #cbd5e1;
+    }
 
-    /* Row 2: [主] TeamA 對 TeamB [客] */
-    .row-teams {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+    .card-league {
+      font-weight: 700;
+      color: var(--accent-blue);
+    }
+
+    .card-teams-score {
+      display: flex;
       align-items: center;
-      margin: 8px 0;
-      font-size: 1.15rem;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .team-block {
+      flex: 1;
+      font-size: 1.05rem;
       font-weight: 800;
       color: #fff;
     }
 
-    .team-home { display: flex; align-items: center; gap: 6px; justify-content: flex-start; }
-    .team-vs { font-size: 0.88rem; font-weight: 500; color: var(--text-muted); padding: 0 12px; text-align: center; }
-    .team-away { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+    .team-block.home { text-align: left; }
+    .team-block.away { text-align: right; }
+
+    .score-block {
+      text-align: center;
+      min-width: 110px;
+    }
+
+    .score-ft {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .score-ht {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .score-ht.highlight {
+      color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
 
     .tag-role {
       font-size: 0.72rem;
@@ -260,36 +353,7 @@
       border-radius: 3px;
     }
 
-    /* Row 3: Score FT (HT) & Arrow > */
-    .row-score {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      margin-top: 6px;
-    }
-
-    .score-box { font-size: 1.35rem; font-weight: 900; color: #fff; letter-spacing: 1px; }
-    .ht-part { font-size: 1.05rem; font-weight: 700; color: var(--text-muted); margin-left: 6px; }
-    .ht-part.highlight {
-      color: var(--accent-green);
-      background: rgba(16, 185, 129, 0.15);
-      padding: 1px 6px;
-      border-radius: 4px;
-      border: 1px solid rgba(16, 185, 129, 0.4);
-    }
-
-    .row-arrow {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      color: #64748b;
-      font-weight: 700;
-    }
-
-    /* Modals */
+    /* Detail Modal */
     .modal-mask {
       display: none;
       position: fixed;
@@ -297,31 +361,29 @@
       background: rgba(0,0,0,0.75);
       backdrop-filter: blur(4px);
       z-index: 100;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
+      padding: 16px;
     }
 
-    @media (min-width: 600px) { .modal-mask { align-items: center; padding: 20px; } }
     .modal-mask.show { display: flex; }
 
     .modal-card {
       background: #1e293b;
       border: 1px solid var(--border-color);
-      border-radius: 16px 16px 0 0;
-      max-width: 600px;
+      border-radius: 16px;
+      max-width: 560px;
       width: 100%;
-      max-height: 85vh;
+      max-height: 88vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
-
-    @media (min-width: 600px) { .modal-card { border-radius: 16px; } }
 
     .modal-header {
       background: #0f172a;
-      padding: 14px 16px;
+      padding: 14px 18px;
       border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
@@ -348,7 +410,10 @@
       text-align: center;
     }
 
-    .nav-tab-btn.active { color: var(--accent-green); border-bottom-color: var(--accent-green); }
+    .nav-tab-btn.active {
+      color: var(--accent-green);
+      border-bottom-color: var(--accent-green);
+    }
 
     .modal-body {
       padding: 16px;
@@ -366,21 +431,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
-
-    .banner-teams {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #fff;
-      padding: 0 10px;
-    }
-
-    .banner-score { font-size: 1.8rem; font-weight: 900; color: #fff; }
-    .banner-ht { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
 
     /* Stats Comparison Bar */
     .stat-row-item { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
@@ -446,39 +498,61 @@
 <body>
 
 <div class="container">
-  <!-- HKJC Header -->
-  <div class="app-header">
-    <div class="header-back" onclick="clearDateFilter()">&lt; 全部</div>
-    <div class="header-title">⚽ HKJC 足球賽果半場篩選追蹤器</div>
-    <div class="header-actions-top">
-      <button class="btn-icon" onclick="openSettingsModal()">⚙️ 設定</button>
-      <button class="btn-icon" onclick="exportCSV()">📥 匯出</button>
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-title-group">
+      <h1>⚽ HKJC 足球賽果半場篩選追蹤器</h1>
+      <p>支援今天、昨天、7日、30日、56日歷史紀錄與半場 1:0 / 2:0 / 0:1 / 0:2 篩選</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn" onclick="openSettingsModal()">⚙️ 設定</button>
+      <button class="btn" onclick="exportCSV()">📥 匯出 CSV</button>
+    </div>
+  </header>
+
+  <!-- Statistics Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">當前範圍賽事數</div>
+      <div class="stat-val" id="totalMatchesCount">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">符合半場條件</div>
+      <div class="stat-val highlight" id="filteredMatchesCount">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">半場領先勝出率</div>
+      <div class="stat-val" id="leadConversionRate">0%</div>
     </div>
   </div>
 
-  <!-- Filters -->
-  <div class="filter-section">
-    <!-- Date Quick Filter -->
+  <!-- Filters Panel -->
+  <div class="filter-panel">
+    <!-- Date Quick Filters -->
     <div class="filter-row" id="datePills">
-      <span class="filter-label-tag">日期：</span>
-      <button class="pill pill-blue" data-range="today">今天</button>
-      <button class="pill pill-blue" data-range="yesterday">昨天</button>
-      <button class="pill pill-blue" data-range="7d">7日</button>
-      <button class="pill pill-blue" data-range="30d">30日</button>
-      <button class="pill pill-blue" data-range="56d">56日</button>
-      <button class="pill pill-blue active" data-range="all">全部</button>
+      <span class="filter-label">日期：</span>
+      <div class="pill-group">
+        <button class="pill pill-blue" data-range="today">今天</button>
+        <button class="pill pill-blue" data-range="yesterday">昨天</button>
+        <button class="pill pill-blue" data-range="7d">7日</button>
+        <button class="pill pill-blue" data-range="30d">30日</button>
+        <button class="pill pill-blue" data-range="56d">56日</button>
+        <button class="pill pill-blue active" data-range="all">全部</button>
+      </div>
     </div>
 
-    <!-- Half-Time Score Filter -->
+    <!-- Half-Time Score Filters -->
     <div class="filter-row" id="htPills">
-      <span class="filter-label-tag">半場：</span>
-      <button class="pill active" data-ht="all">全部</button>
-      <button class="pill" data-ht="combo">🔥 1:0/2:0/0:1/0:2</button>
-      <button class="pill" data-ht="1:0">1:0</button>
-      <button class="pill" data-ht="2:0">2:0</button>
-      <button class="pill" data-ht="0:1">0:1</button>
-      <button class="pill" data-ht="0:2">0:2</button>
-      <button class="pill" data-ht="0:0">0:0</button>
+      <span class="filter-label">半場：</span>
+      <div class="pill-group">
+        <button class="pill active" data-ht="all">全部</button>
+        <button class="pill" data-ht="combo">🔥 1:0/2:0/0:1/0:2</button>
+        <button class="pill" data-ht="1:0">1:0</button>
+        <button class="pill" data-ht="2:0">2:0</button>
+        <button class="pill" data-ht="0:1">0:1</button>
+        <button class="pill" data-ht="0:2">0:2</button>
+        <button class="pill" data-ht="0:0">0:0</button>
+      </div>
     </div>
 
     <!-- Search & Specific Date Picker -->
@@ -488,14 +562,14 @@
     </div>
   </div>
 
-  <!-- Results Summary Counter -->
-  <div class="summary-bar">
-    <div>顯示：<strong id="displayCount" style="color: var(--accent-green);">0</strong> 場 | 符合半場條件：<strong id="matchCount" style="color: var(--accent-green);">0</strong> 場</div>
-    <div id="dateLabel" style="color: var(--text-muted); font-size: 0.75rem;">全部歷史紀錄</div>
+  <!-- Results Count Toolbar -->
+  <div class="view-toolbar">
+    <div>顯示中：<strong id="displayCount">0</strong> 場賽事 | 符合條件：<strong id="matchCount">0</strong> 場</div>
+    <div id="dateLabel">全部歷史紀錄</div>
   </div>
 
   <!-- Matches List Container -->
-  <div id="matchesList" class="match-list"></div>
+  <div id="matchesList" class="match-list-container"></div>
 
   <!-- Empty Box Placeholder -->
   <div id="emptyBox" class="empty-box" style="display: none;">
@@ -508,15 +582,15 @@
   </footer>
 </div>
 
-<!-- Modal: Settings (Notifications & PWA Install) -->
+<!-- Modal: Settings -->
 <div id="settingsModal" class="modal-mask" onclick="closeSettingsModal(event)">
   <div class="modal-card" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div style="font-weight: 700; color: #fff; font-size: 1rem;">⚙️ 應用程式設定</div>
-      <button class="btn-icon" onclick="closeSettingsModal()">✕ 關閉</button>
+      <button class="btn" onclick="closeSettingsModal()">✕ 關閉</button>
     </div>
     <div class="modal-body">
-      <!-- 1. App Icon & Add to Home Screen -->
+      <!-- App Icon & Add to Home Screen -->
       <div class="setting-group">
         <div class="setting-title">
           <span>📲 加至手機主畫面 (PWA)</span>
@@ -531,7 +605,7 @@
         <button class="btn-full btn-green" onclick="triggerPWAInstall()">📲 立即將 App 加入至主畫面</button>
       </div>
 
-      <!-- 2. Notification Preferences -->
+      <!-- Notification Preferences -->
       <div class="setting-group">
         <div class="setting-title">
           <span>🔔 賽果即時推播通知</span>
@@ -557,22 +631,22 @@
   </div>
 </div>
 
-<!-- Modal: Match Details (Stats, Lineup, Venue, Timezone) -->
+<!-- Modal: Match Details -->
 <div id="detailModal" class="modal-mask" onclick="closeDetailModal(event)">
   <div class="modal-card" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div style="font-weight: 700; color: #fff; font-size: 0.95rem;" id="modalLeagueDate">聯賽資訊</div>
-      <button class="btn-icon" onclick="closeDetailModal()">✕ 關閉</button>
+      <button class="btn" onclick="closeDetailModal()">✕ 關閉</button>
     </div>
 
     <div style="padding: 12px 16px 0 16px;">
       <div class="detail-score-banner">
-        <div class="banner-teams">
+        <div style="display: flex; justify-content: space-between; width: 100%; font-size: 1.1rem; font-weight: 800; color: #fff; padding: 0 10px;">
           <span id="modalHomeName">[主] 主隊</span>
           <span id="modalAwayName">客隊 [客]</span>
         </div>
-        <div class="banner-score" id="modalFTScore">1 : 0</div>
-        <div class="banner-ht" id="modalHTScore">半場：1:0 (完場)</div>
+        <div style="font-size: 1.8rem; font-weight: 900; color: #fff;" id="modalFTScore">1 : 0</div>
+        <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;" id="modalHTScore">半場：1:0 (完場)</div>
       </div>
     </div>
 
@@ -781,25 +855,33 @@
       code: "FB3417", date: "22/08/2026", iso: "2026-08-22", league: "法國甲組聯賽",
       home: "登卡基", away: "蒙彼利埃", ft: "0:1", ht: "0:0",
       venue: "馬塞爾·特里布球場", city: "法國 · 敦克爾克", capacity: "5,000 人",
-      hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)"
+      hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
+      homeFormation: "4-4-2", awayFormation: "4-3-3",
+      stats: { shots: [8, 11], shotsOnTarget:, possession: ["45%", "55%"], corners:, fouls: [12, 10], yellowCards:, offsides: }
     },
     {
       code: "FB3495", date: "22/08/2026", iso: "2026-08-22", league: "法國乙組聯賽",
       home: "FC波城", away: "南錫", ft: "0:1", ht: "0:0",
       venue: "努斯特體育場", city: "法國 · 波城", capacity: "4,031 人",
-      hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)"
+      hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
+      homeFormation: "4-3-3", awayFormation: "4-4-2",
+      stats: { shots: [7, 10], shotsOnTarget:, possession: ["49%", "51%"], corners:, fouls: [11, 13], yellowCards:, offsides: }
     },
     {
       code: "FB3290", date: "22/08/2026", iso: "2026-08-22", league: "烏拉圭甲組聯賽",
       home: "艾比安FC", away: "波士頓河", ft: "2:3", ht: "1:2",
       venue: "薩羅迪球場", city: "烏拉圭 · 蒙特維多", capacity: "6,000 人",
-      hktTime: "2026-08-22 03:00 (UTC+8)", localTime: "2026-08-21 16:00 (UTC-3 UYT)"
+      hktTime: "2026-08-22 03:00 (UTC+8)", localTime: "2026-08-21 16:00 (UTC-3 UYT)",
+      homeFormation: "4-4-2", awayFormation: "4-3-3",
+      stats: { shots: [11, 14], shotsOnTarget:, possession: ["47%", "53%"], corners:, fouls: [15, 12], yellowCards:, offsides: }
     },
     {
       code: "FB3277", date: "22/08/2026", iso: "2026-08-22", league: "比利時甲組聯賽",
       home: "標準列治", away: "拉路維爾", ft: "2:0", ht: "0:0",
       venue: "莫里斯·迪弗拉納球場", city: "比利時 · 列日", capacity: "27,670 人",
-      hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)"
+      hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)",
+      homeFormation: "4-3-3", awayFormation: "4-4-2",
+      stats: { shots:, shotsOnTarget:, possession: ["59%", "41%"], corners:, fouls: [9, 14], yellowCards:, offsides: }
     },
 
     // Yesterday (21/08/2026)
@@ -809,7 +891,7 @@
       venue: "比亞韋斯托克市立體育場", city: "波蘭 · 比亞韋斯托克", capacity: "22,386 人",
       hktTime: "2026-08-21 02:45 (UTC+8)", localTime: "2026-08-20 20:45 (UTC+2 CEST)",
       homeFormation: "4-4-2", awayFormation: "4-5-1",
-      stats: { shots: [15, 6], shotsOnTarget:, possession: ["58%", "42%"], corners:, fouls: [10, 13], yellowCards:, offsides: },
+      stats: { shots:, shotsOnTarget:, possession: ["58%", "42%"], corners:, fouls: [10, 13], yellowCards:, offsides: },
       homeLineup: ["1. 阿巴拉莫域治 (GK)", "3. 沙切克 (DF)", "6. 羅曼卓克 (MF)", "10. 伊馬斯 (FW - 14' ⚽, 38' ⚽)", "9. 普魯魯 (FW - 56' ⚽)"],
       awayLineup: ["1. 馬卡里澤 (GK)", "4. 塔比澤 (DF)", "7. 科赫雷澤 (MF)", "9. 希哈德澤 (FW)"]
     },
@@ -817,13 +899,17 @@
       code: "FB3256", date: "21/08/2026", iso: "2026-08-21", league: "歐霸盃",
       home: "比錫達斯", away: "考諾", ft: "3:0", ht: "2:0",
       venue: "沃達豐公園球場", city: "土耳其 · 伊斯坦堡", capacity: "42,590 人",
-      hktTime: "2026-08-21 02:00 (UTC+8)", localTime: "2026-08-20 21:00 (UTC+3 TRT)"
+      hktTime: "2026-08-21 02:00 (UTC+8)", localTime: "2026-08-20 21:00 (UTC+3 TRT)",
+      homeFormation: "4-2-3-1", awayFormation: "4-4-2",
+      stats: { shots:, shotsOnTarget:, possession: ["64%", "36%"], corners:, fouls: [8, 15], yellowCards:, offsides: }
     },
     {
       code: "FB3250", date: "21/08/2026", iso: "2026-08-21", league: "歐洲協會聯賽",
       home: "赫斯", away: "維也納迅速", ft: "2:2", ht: "0:1",
       venue: "泰恩卡斯爾公園球場", city: "蘇格蘭 · 愛丁堡", capacity: "19,852 人",
-      hktTime: "2026-08-21 02:45 (UTC+8)", localTime: "2026-08-20 19:45 (UTC+1 BST)"
+      hktTime: "2026-08-21 02:45 (UTC+8)", localTime: "2026-08-20 19:45 (UTC+1 BST)",
+      homeFormation: "4-3-3", awayFormation: "4-4-2",
+      stats: { shots: [12, 13], shotsOnTarget:, possession: ["50%", "50%"], corners:, fouls: [12, 11], yellowCards:, offsides: }
     },
 
     // 7 Days
@@ -831,19 +917,25 @@
       code: "FB3187", date: "20/08/2026", iso: "2026-08-20", league: "沙特超級聯賽",
       home: "艾拿積馬", away: "伊蒂哈德", ft: "0:3", ht: "0:2",
       venue: "阿卜杜拉國王體育城", city: "沙特阿拉伯 · 吉達", capacity: "62,345 人",
-      hktTime: "2026-08-20 02:00 (UTC+8)", localTime: "2026-08-19 21:00 (UTC+3 AST)"
+      hktTime: "2026-08-20 02:00 (UTC+8)", localTime: "2026-08-19 21:00 (UTC+3 AST)",
+      homeFormation: "4-4-2", awayFormation: "4-3-3",
+      stats: { shots:, shotsOnTarget:, possession: ["36%", "64%"], corners:, fouls: [14, 7], yellowCards:, offsides: }
     },
     {
       code: "FB3140", date: "18/08/2026", iso: "2026-08-18", league: "英格蘭超級聯賽",
       home: "曼城", away: "車路士", ft: "2:0", ht: "1:0",
       venue: "阿提哈德球場 (Etihad Stadium)", city: "英國 · 曼徹斯特", capacity: "53,400 人",
-      hktTime: "2026-08-18 23:30 (UTC+8)", localTime: "2026-08-18 16:30 (UTC+1 BST)"
+      hktTime: "2026-08-18 23:30 (UTC+8)", localTime: "2026-08-18 16:30 (UTC+1 BST)",
+      homeFormation: "4-3-3", awayFormation: "4-2-3-1",
+      stats: { shots: [16, 8], shotsOnTarget:, possession: ["62%", "38%"], corners:, fouls: [8, 13], yellowCards:, offsides: }
     },
     {
       code: "FB3142", date: "17/08/2026", iso: "2026-08-17", league: "西班牙甲組聯賽",
       home: "皇家馬德里", away: "維拉利爾", ft: "3:0", ht: "1:0",
       venue: "聖地亞哥·伯納烏球場", city: "西班牙 · 馬德里", capacity: "81,044 人",
-      hktTime: "2026-08-17 03:00 (UTC+8)", localTime: "2026-08-16 21:00 (UTC+2 CEST)"
+      hktTime: "2026-08-17 03:00 (UTC+8)", localTime: "2026-08-16 21:00 (UTC+2 CEST)",
+      homeFormation: "4-3-3", awayFormation: "4-4-2",
+      stats: { shots: [19, 7], shotsOnTarget:, possession: ["66%", "34%"], corners:, fouls: [7, 12], yellowCards:, offsides: }
     },
 
     // 30 & 56 Days
@@ -851,43 +943,57 @@
       code: "FB3150", date: "15/08/2026", iso: "2026-08-15", league: "德國甲組聯賽",
       home: "拜仁慕尼黑", away: "史特加", ft: "3:1", ht: "2:0",
       venue: "安聯球場 (Allianz Arena)", city: "德國 · 慕尼黑", capacity: "75,000 人",
-      hktTime: "2026-08-15 21:30 (UTC+8)", localTime: "2026-08-15 15:30 (UTC+2 CEST)"
+      hktTime: "2026-08-15 21:30 (UTC+8)", localTime: "2026-08-15 15:30 (UTC+2 CEST)",
+      homeFormation: "4-2-3-1", awayFormation: "4-4-2",
+      stats: { shots: [17, 9], shotsOnTarget:, possession: ["60%", "40%"], corners:, fouls: [9, 11], yellowCards:, offsides: }
     },
     {
       code: "FB3092", date: "08/08/2026", iso: "2026-08-08", league: "日本職業聯賽",
       home: "橫濱水手", away: "川崎前鋒", ft: "1:1", ht: "1:0",
       venue: "日產體育場", city: "日本 · 橫濱", capacity: "72,327 人",
-      hktTime: "2026-08-08 18:00 (UTC+8)", localTime: "2026-08-08 19:00 (UTC+9 JST)"
+      hktTime: "2026-08-08 18:00 (UTC+8)", localTime: "2026-08-08 19:00 (UTC+9 JST)",
+      homeFormation: "4-3-3", awayFormation: "4-3-3",
+      stats: { shots: [12, 11], shotsOnTarget:, possession: ["51%", "49%"], corners:, fouls: [10, 10], yellowCards:, offsides: }
     },
     {
       code: "FB2980", date: "02/08/2026", iso: "2026-08-02", league: "法國甲組聯賽",
       home: "巴黎聖日耳門", away: "里昂", ft: "4:1", ht: "2:0",
       venue: "王子公園體育場", city: "法國 · 巴黎", capacity: "47,929 人",
-      hktTime: "2026-08-02 02:45 (UTC+8)", localTime: "2026-08-01 20:45 (UTC+2 CEST)"
+      hktTime: "2026-08-02 02:45 (UTC+8)", localTime: "2026-08-01 20:45 (UTC+2 CEST)",
+      homeFormation: "4-3-3", awayFormation: "4-3-3",
+      stats: { shots: [18, 8], shotsOnTarget:, possession: ["65%", "35%"], corners:, fouls: [8, 12], yellowCards:, offsides: }
     },
     {
       code: "FB2890", date: "27/07/2026", iso: "2026-07-27", league: "意大利甲組聯賽",
       home: "國際米蘭", away: "阿特蘭大", ft: "2:0", ht: "1:0",
       venue: "聖西路球場 (San Siro)", city: "意大利 · 米蘭", capacity: "75,817 人",
-      hktTime: "2026-07-27 02:45 (UTC+8)", localTime: "2026-07-26 20:45 (UTC+2 CEST)"
+      hktTime: "2026-07-27 02:45 (UTC+8)", localTime: "2026-07-26 20:45 (UTC+2 CEST)",
+      homeFormation: "3-5-2", awayFormation: "3-4-2-1",
+      stats: { shots: [14, 9], shotsOnTarget:, possession: ["55%", "45%"], corners:, fouls: [11, 14], yellowCards:, offsides: }
     },
     {
       code: "FB2780", date: "18/07/2026", iso: "2026-07-18", league: "美洲國家盃",
       home: "阿根廷", away: "哥倫比亞", ft: "1:0", ht: "1:0",
       venue: "硬石體育場 (Hard Rock Stadium)", city: "美國 · 邁阿密", capacity: "65,326 人",
-      hktTime: "2026-07-18 08:00 (UTC+8)", localTime: "2026-07-17 20:00 (UTC-4 EDT)"
+      hktTime: "2026-07-18 08:00 (UTC+8)", localTime: "2026-07-17 20:00 (UTC-4 EDT)",
+      homeFormation: "4-3-3", awayFormation: "4-3-3",
+      stats: { shots: [11, 10], shotsOnTarget:, possession: ["52%", "48%"], corners:, fouls: [16, 17], yellowCards:, offsides: }
     },
     {
-      code: "FB2650", date: "08/07/2026", iso: "2026-07-08", league: "南美自由盃",
+      code: "FB2650", date: "08/07/2026", iso: "2026-08-07", league: "南美自由盃",
       home: "法林明高", away: "彭美拉斯", ft: "2:1", ht: "2:0",
       venue: "馬拉簡拿球場", city: "巴西 · 里約熱內盧", capacity: "78,838 人",
-      hktTime: "2026-07-08 08:30 (UTC+8)", localTime: "2026-07-07 21:30 (UTC-3 BRT)"
+      hktTime: "2026-07-08 08:30 (UTC+8)", localTime: "2026-07-07 21:30 (UTC-3 BRT)",
+      homeFormation: "4-2-3-1", awayFormation: "4-3-3",
+      stats: { shots: [13, 11], shotsOnTarget:, possession: ["54%", "46%"], corners:, fouls: [14, 15], yellowCards:, offsides: }
     },
     {
       code: "FB2540", date: "28/06/2026", iso: "2026-06-28", league: "巴西甲組聯賽",
       home: "保地花高", away: "高士路", ft: "3:0", ht: "2:0",
       venue: "尼爾頓·桑托斯奧林匹克體育場", city: "巴西 · 里約熱內盧", capacity: "44,661 人",
-      hktTime: "2026-06-28 07:00 (UTC+8)", localTime: "2026-06-27 20:00 (UTC-3 BRT)"
+      hktTime: "2026-06-28 07:00 (UTC+8)", localTime: "2026-06-27 20:00 (UTC-3 BRT)",
+      homeFormation: "4-3-3", awayFormation: "4-4-2",
+      stats: { shots:, shotsOnTarget:, possession: ["57%", "43%"], corners:, fouls: [11, 13], yellowCards:, offsides: }
     }
   ];
 
@@ -1043,7 +1149,25 @@
     });
 
     document.getElementById('displayCount').textContent = filtered.length;
-    document.getElementById('matchCount').textContent = filtered.filter(m => ['1:0','2:0','0:1','0:2'].includes((m.ht||'').replace(/\\s+/g,''))).length;
+    document.getElementById('totalMatchesCount').textContent = filtered.length;
+    
+    const matchedHTCount = filtered.filter(m => ['1:0','2:0','0:1','0:2'].includes((m.ht||'').replace(/\\s+/g,''))).length;
+    document.getElementById('matchCount').textContent = matchedHTCount;
+    document.getElementById('filteredMatchesCount').textContent = matchedHTCount;
+
+    // Calculate Lead Conversion
+    let leadCount = 0, winCount = 0;
+    filtered.forEach(m => {
+      const [hHT, aHT] = (m.ht||'0:0').split(':').map(Number);
+      const [hFT, aFT] = (m.ft||'0:0').split(':').map(Number);
+      if (hHT !== aHT) {
+        leadCount++;
+        const htLeader = hHT > aHT ? 'h' : 'a';
+        const ftWinner = hFT > aFT ? 'h' : hFT < aFT ? 'a' : 'd';
+        if (htLeader === ftWinner) winCount++;
+      }
+    });
+    document.getElementById('leadConversionRate').textContent = leadCount > 0 ? `${Math.round((winCount/leadCount)*100)}%` : '0%';
 
     const dateLabelMap = {
       'today': `今天 (${baseISO})`,
@@ -1070,28 +1194,22 @@
       const match = ['1:0','2:0','0:1','0:2'].includes((m.ht||'').replace(/\\s+/g, ''));
       const realIdx = matches.indexOf(m);
       return `
-        <div class="match-item ${match ? 'matched-ht' : ''}" onclick="openDetail(${realIdx})">
-          <div class="row-meta">
-            <span class="meta-date-code">${m.date} ${m.code ? m.code : ''}</span>
-            <span class="meta-league">${m.league}</span>
+        <div class="match-card ${match ? 'matched-ht' : ''}" onclick="openDetail(${realIdx})">
+          <div class="card-top">
+            <span class="card-date-code">${m.date} ${m.code ? m.code : ''}</span>
+            <span class="card-league">${m.league}</span>
           </div>
-          <div class="row-teams">
-            <div class="team-home">
-              <span class="tag-role">[主]</span>
-              <span>${m.home}</span>
+          <div class="card-teams-score">
+            <div class="team-block home">
+              <span class="tag-role">[主]</span> ${m.home}
             </div>
-            <div class="team-vs">對</div>
-            <div class="team-away">
-              <span>${m.away}</span>
-              <span class="tag-role">[客]</span>
+            <div class="score-block">
+              <div class="score-ft">${m.ft}</div>
+              <div class="score-ht ${match ? 'highlight' : ''}">半場: ${m.ht}</div>
             </div>
-          </div>
-          <div class="row-score">
-            <div class="score-box">
-              <span>${m.ft}</span>
-              <span class="ht-part ${match ? 'highlight' : ''}">(${m.ht})</span>
+            <div class="team-block away">
+              ${m.away} <span class="tag-role">[客]</span>
             </div>
-            <div class="row-arrow">&gt;</div>
           </div>
         </div>
       `;
@@ -1197,3 +1315,4 @@
 </script>
 </body>
 </html>
+}
