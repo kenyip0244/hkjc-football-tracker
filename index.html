@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>賽果</title>
+  <title>⚽ HKJC 足球賽果半場篩選追蹤器</title>
 
   <!-- PWA & Mobile App Meta Tags (Soccer Emoji Icon) -->
   <link rel="manifest" href="manifest.json">
@@ -12,7 +12,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="⚽賽果">
+  <meta name="apple-mobile-web-app-title" content="⚽ HKJC 賽果">
   <meta name="theme-color" content="#0b1120">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,10 +67,15 @@
     }
 
     .header-title {
-      font-size: 1.25rem;
+      font-size: 1.02rem;
       font-weight: 800;
-      letter-spacing: 2px;
-      margin-left: -20px;
+      letter-spacing: 0.5px;
+      text-align: center;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 4px;
     }
 
     .header-actions-top { display: flex; gap: 6px; }
@@ -395,7 +400,7 @@
   <!-- HKJC Header -->
   <div class="app-header">
     <div class="header-back" onclick="clearDateFilter()">&lt; 返回</div>
-    <div class="header-title">賽果</div>
+    <div class="header-title">⚽ HKJC 足球賽果半場篩選追蹤器</div>
     <div class="header-actions-top">
       <button class="btn-icon" onclick="openSettingsModal()">⚙️ 設定</button>
       <button class="btn-icon" onclick="exportCSV()">📥 匯出</button>
@@ -408,9 +413,9 @@
       <button class="pill pill-blue" data-range="today">今天</button>
       <button class="pill pill-blue" data-range="yesterday">昨天</button>
       <button class="pill pill-blue" data-range="7d">7日</button>
-      <button class="pill pill-blue" data-range="30d">30日</button>
-      <button class="pill pill-blue" data-range="56d">56日</button>
-      <button class="pill pill-blue active" data-range="all">全部</button>
+      <button class="pill-btn pill-blue" data-range="30d">30日</button>
+      <button class="pill-btn pill-blue" data-range="56d">56日</button>
+      <button class="pill-btn pill-blue active" data-range="all">全部</button>
     </div>
 
     <div class="filter-row" id="htPills">
