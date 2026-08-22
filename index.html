@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>賽果</title>
 
-  <!-- PWA & Mobile App Meta Tags -->
+  <!-- PWA & Mobile App Meta Tags (Soccer Emoji Icon) -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icons/soccer.svg">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/soccer.svg">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="⚽賽果">
   <meta name="theme-color" content="#0b1120">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,6 +72,8 @@
       letter-spacing: 2px;
       margin-left: -20px;
     }
+
+    .header-actions-top { display: flex; gap: 6px; }
 
     .btn-icon {
       background: rgba(0,0,0,0.2);
@@ -179,16 +182,8 @@
       margin-bottom: 6px;
     }
 
-    .meta-date-code {
-      font-weight: 600;
-      color: #cbd5e1;
-      letter-spacing: 0.5px;
-    }
-
-    .meta-league {
-      font-weight: 600;
-      color: #94a3b8;
-    }
+    .meta-date-code { font-weight: 600; color: #cbd5e1; letter-spacing: 0.5px; }
+    .meta-league { font-weight: 600; color: #94a3b8; }
 
     /* Row 2: [主] TeamA 對 TeamB [客] */
     .row-teams {
@@ -223,20 +218,8 @@
       margin-top: 6px;
     }
 
-    .score-box {
-      font-size: 1.35rem;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: 1px;
-    }
-
-    .ht-part {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-left: 6px;
-    }
-
+    .score-box { font-size: 1.35rem; font-weight: 900; color: #fff; letter-spacing: 1px; }
+    .ht-part { font-size: 1.05rem; font-weight: 700; color: var(--text-muted); margin-left: 6px; }
     .ht-part.highlight { color: var(--accent-green); }
 
     .row-arrow {
@@ -249,7 +232,7 @@
       font-weight: 700;
     }
 
-    /* Detail Modal (Bottom Sheet / Popup) */
+    /* Modals */
     .modal-mask {
       display: none;
       position: fixed;
@@ -280,9 +263,7 @@
       box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
     }
 
-    @media (min-width: 600px) {
-      .modal-card { border-radius: 16px; }
-    }
+    @media (min-width: 600px) { .modal-card { border-radius: 16px; } }
 
     .modal-header {
       background: #0f172a;
@@ -313,10 +294,7 @@
       text-align: center;
     }
 
-    .nav-tab-btn.active {
-      color: var(--accent-green);
-      border-bottom-color: var(--accent-green);
-    }
+    .nav-tab-btn.active { color: var(--accent-green); border-bottom-color: var(--accent-green); }
 
     .modal-body {
       padding: 16px;
@@ -364,12 +342,51 @@
     .lineup-title { font-size: 0.85rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; }
     .player-item { font-size: 0.8rem; color: #cbd5e1; padding: 3px 0; }
 
-    /* Venue & Timezone Card */
+    /* Settings UI Card */
+    .setting-group {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .setting-title { font-size: 0.9rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .setting-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #cbd5e1; }
+    .radio-group { display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem; color: var(--text-muted); }
+    .radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #cbd5e1; }
+
+    .btn-full {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: #fff;
+    }
+    .btn-full.btn-green { background: #059669; border-color: #10b981; }
+
+    /* Venue Card */
     .info-card { background: #0f172a; border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; }
     .info-item { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
     .info-label { color: var(--text-muted); font-weight: 600; }
     .info-val { color: #fff; font-weight: 600; }
     .empty-box { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+
+    footer {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
@@ -379,8 +396,8 @@
   <div class="app-header">
     <div class="header-back" onclick="clearDateFilter()">&lt; 返回</div>
     <div class="header-title">賽果</div>
-    <div style="display: flex; gap: 6px;">
-      <button class="btn-icon" onclick="toggleNotifications()">🔔 通知</button>
+    <div class="header-actions-top">
+      <button class="btn-icon" onclick="openSettingsModal()">⚙️ 設定</button>
       <button class="btn-icon" onclick="exportCSV()">📥 匯出</button>
     </div>
   </div>
@@ -393,7 +410,7 @@
       <button class="pill pill-blue" data-range="7d">7日</button>
       <button class="pill-btn pill-blue" data-range="30d">30日</button>
       <button class="pill-btn pill-blue" data-range="56d">56日</button>
-      <button class="pill pill-blue active" data-range="all">全部</button>
+      <button class="pill-btn pill-blue active" data-range="all">全部</button>
     </div>
 
     <div class="filter-row" id="htPills">
@@ -420,6 +437,59 @@
   <!-- Matches List -->
   <div id="matchesList" class="match-list"></div>
   <div id="emptyBox" class="empty-box" style="display: none;"><h3>查無符合條件的賽事</h3></div>
+
+  <footer>
+    <p>HKJC Football Match Tracker &copy; 2026 | By Ken Yip</p>
+  </footer>
+</div>
+
+<!-- Modal: Settings (Notifications & PWA Install) -->
+<div id="settingsModal" class="modal-mask" onclick="closeSettingsModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div style="font-weight: 700; color: #fff; font-size: 1rem;">⚙️ 應用程式設定</div>
+      <button class="btn-icon" onclick="closeSettingsModal()">✕ 關閉</button>
+    </div>
+    <div class="modal-body">
+      <!-- 1. App Icon & Add to Home Screen -->
+      <div class="setting-group">
+        <div class="setting-title">
+          <span>📲 加至手機主畫面 (PWA)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="font-size: 2.2rem; background: #0f172a; border-radius: 12px; padding: 4px 10px; border: 1px solid var(--border-color);">⚽</div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">
+            <div>程式圖示已設定為 <strong>足球 Emoji (⚽)</strong></div>
+            <div>加入主畫面後即可像原生 App 一樣全螢幕開啟。</div>
+          </div>
+        </div>
+        <button class="btn-full btn-green" onclick="triggerPWAInstall()">📲 立即將 App 加入至主畫面</button>
+      </div>
+
+      <!-- 2. Notification Preferences -->
+      <div class="setting-group">
+        <div class="setting-title">
+          <span>🔔 賽果即時推播通知</span>
+        </div>
+        <div class="setting-row">
+          <span>啟用桌面 / 手機即時推播</span>
+          <input type="checkbox" id="chkNotification" style="width: 18px; height: 18px;" onchange="onNotificationToggle()">
+        </div>
+        <div class="radio-group">
+          <span style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 2px;">通知觸發條件：</span>
+          <label class="radio-label">
+            <input type="radio" name="notifyScope" value="target" checked onchange="saveNotifyScope()">
+            <span>僅通知半場 1:0 / 2:0 / 0:1 / 0:2 之完場賽事 (推薦)</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="notifyScope" value="all" onchange="saveNotifyScope()">
+            <span>所有完場賽事均發送通知</span>
+          </label>
+        </div>
+        <button class="btn-full" onclick="testNotification()">⚡ 立即發送測試通知</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal: Match Details (Stats, Lineup, Venue, Timezone) -->
@@ -441,7 +511,6 @@
       </div>
     </div>
 
-    <!-- Navigation Tabs -->
     <div class="modal-nav-tabs">
       <button class="nav-tab-btn active" onclick="switchDetailTab('stats')">📊 比賽數據</button>
       <button class="nav-tab-btn" onclick="switchDetailTab('lineup')">👥 雙方陣容</button>
@@ -449,12 +518,12 @@
     </div>
 
     <div class="modal-body">
-      <!-- 1. Stats Tab -->
+      <!-- Stats Tab -->
       <div id="tabStats">
         <div id="statsContainer"></div>
       </div>
 
-      <!-- 2. Lineup Tab -->
+      <!-- Lineup Tab -->
       <div id="tabLineup" style="display: none;">
         <div class="lineup-container">
           <div class="lineup-col">
@@ -474,7 +543,7 @@
         </div>
       </div>
 
-      <!-- 3. Venue & Timezone Tab -->
+      <!-- Venue Tab -->
       <div id="tabVenue" style="display: none;">
         <div class="info-card">
           <div class="info-item">
@@ -510,6 +579,76 @@
 <script>
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
+  function triggerPWAInstall() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        closeSettingsModal();
+      });
+    } else {
+      alert('iPhone / iPad 用戶：請點擊 Safari 底部「分享」按鈕 📤 ➔ 選擇「加入至主畫面」，即可生成 ⚽ 足球圖示 App！');
+    }
+  }
+
+  function openSettingsModal() {
+    document.getElementById('chkNotification').checked = localStorage.getItem('hkjc_notify') === 'true';
+    const scope = localStorage.getItem('hkjc_notify_scope') || 'target';
+    document.querySelectorAll('input[name="notifyScope"]').forEach(r => r.checked = (r.value === scope));
+    document.getElementById('settingsModal').classList.add('show');
+  }
+
+  function closeSettingsModal() {
+    document.getElementById('settingsModal').classList.remove('show');
+  }
+
+  async function onNotificationToggle() {
+    const chk = document.getElementById('chkNotification');
+    if (chk.checked) {
+      if (!('Notification' in window)) {
+        alert('您的瀏覽器不支援通知功能。');
+        chk.checked = false;
+        return;
+      }
+      if (Notification.permission !== 'granted') {
+        const p = await Notification.requestPermission();
+        if (p === 'granted') {
+          localStorage.setItem('hkjc_notify', 'true');
+          new Notification('⚽ 賽果通知已開啟', { body: '有符合條件之新賽果時將即時推播通知。', icon: 'icons/soccer.svg' });
+        } else {
+          chk.checked = false;
+          alert('請在瀏覽器設定中允許網站發送通知。');
+        }
+      } else {
+        localStorage.setItem('hkjc_notify', 'true');
+      }
+    } else {
+      localStorage.setItem('hkjc_notify', 'false');
+    }
+  }
+
+  function saveNotifyScope() {
+    const scope = document.querySelector('input[name="notifyScope"]:checked').value;
+    localStorage.setItem('hkjc_notify_scope', scope);
+  }
+
+  function testNotification() {
+    if (Notification.permission !== 'granted') {
+      alert('請先在設定中勾選「啟用桌面/手機即時推播」以授權通知。');
+      return;
+    }
+    new Notification('⚽ [測試通知] 索察 1:0 甘岡 (完場)', {
+      body: '半場比數：1:0 | 全場完場：1:0 (符合篩選條件)',
+      icon: 'icons/soccer.svg'
+    });
+  }
+
   const DATASET = [
     {
       code: "FB3494", date: "22/08/2026", iso: "2026-08-22", league: "法國乙組聯賽",
@@ -517,7 +656,7 @@
       venue: "奧古斯特·博納爾球場 (Stade Auguste-Bonal)", city: "法國 · 蒙貝利亞爾", capacity: "20,005 人",
       hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-2-3-1",
-      stats: { shots: [12, 8], shotsOnTarget:, possession: ["54%", "46%"], corners:, fouls: [11, 14], yellowCards:, offsides: },
+      stats: { shots: [12, 8], shotsOnTarget:, possession: ["54%", "46%"], corners: [6, 4], fouls: [11, 14], yellowCards:, offsides: },
       homeLineup: ["1. 柏度 (GK)", "3. 達施華 (DF)", "4. 艾米特 (DF)", "5. 保羅 (DF)", "8. 戴利 (MF)", "10. 韋斯 (MF)", "11. 查維斯 (FW - 34' ⚽)"],
       awayLineup: ["1. 巴士迪亞 (GK)", "2. 勒蒙特 (DF)", "4. 盧卡斯 (DF)", "6. 哥美斯 (MF)", "7. 梅菲 (MF)", "9. 基恩 (FW)", "10. 杜蘭特 (FW)"]
     },
@@ -527,7 +666,7 @@
       venue: "波羅的海球場 (Ostseestadion)", city: "德國 · 羅斯托克", capacity: "29,000 人",
       hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)",
       homeFormation: "4-4-2", awayFormation: "4-2-3-1",
-      stats: { shots:, shotsOnTarget:, possession: ["32%", "68%"], corners:, fouls: [13, 8], yellowCards:, offsides: },
+      stats: { shots: [4, 18], shotsOnTarget:, possession: ["32%", "68%"], corners:, fouls: [13, 8], yellowCards:, offsides: },
       homeLineup: ["1. 烏比格 (GK)", "2. 舒密特 (DF)", "5. 史坦因 (DF)", "8. 邁爾 (MF)", "10. 舒爾茨 (MF)", "9. 赫文 (FW)"],
       awayLineup: ["1. 紐貝爾 (GK)", "4. 華格洛文 (DF)", "6. 史迪拿 (MF)", "8. 米洛 (MF - 18' ⚽)", "11. 雲達維迪 (FW - 38' ⚽, 62' ⚽)", "26. 昂達夫 (FW - 78' ⚽)"]
     },
@@ -537,7 +676,7 @@
       venue: "學生之城球場 (Studenternas IP)", city: "瑞典 · 烏普薩拉", capacity: "10,522 人",
       hktTime: "2026-08-22 01:00 (UTC+8)", localTime: "2026-08-21 19:00 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-3-3",
-      stats: { shots:, shotsOnTarget:, possession: ["48%", "52%"], corners:, fouls: [14, 11], yellowCards:, offsides: },
+      stats: { shots: [4, 9], shotsOnTarget:, possession: ["48%", "52%"], corners: [4, 7], fouls: [14, 11], yellowCards:, offsides: },
       homeLineup: ["1. 泰祖寧 (GK)", "3. 尼爾遜 (DF)", "8. 史雲遜 (MF)", "10. 柏臣 (MF)", "9. 米歷 (FW)"],
       awayLineup: ["1. 連迪 (GK)", "3. 漢臣 (DF)", "8. 羅美奧 (MF)", "11. 朱利斯·林德伯格 (FW - 28' ⚽)", "9. 古斯塔夫·林格倫 (FW - 62' ⚽, 80' ⚽)"]
     },
@@ -547,7 +686,7 @@
       venue: "酋長球場 (Emirates Stadium)", city: "英國 · 倫敦", capacity: "60,704 人",
       hktTime: "2026-08-22 03:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+1 BST)",
       homeFormation: "4-3-3", awayFormation: "5-3-2",
-      stats: { shots:, shotsOnTarget:, possession: ["65%", "35%"], corners:, fouls: [9, 12], yellowCards:, offsides: },
+      stats: { shots: [19, 4], shotsOnTarget:, possession: ["65%", "35%"], corners:, fouls: [9, 12], yellowCards:, offsides: },
       homeLineup: ["1. 拉也 (GK)", "4. 白蘭特 (DF)", "6. 加比爾 (DF)", "8. 奧迪加特 (MF - 12' ⚽)", "7. 沙卡 (FW - 36' ⚽)", "29. 夏維斯 (FW - 68' ⚽)"],
       awayLineup: ["1. 威爾遜 (GK)", "3. 湯馬士 (DF)", "5. 堅治 (DF)", "8. 彭馬 (MF)", "9. 森斯 (FW)"]
     },
@@ -557,7 +696,7 @@
       venue: "加布里埃爾·蒙皮德球場", city: "法國 · 克萊蒙費朗", capacity: "13,000 人",
       hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
       homeFormation: "4-2-3-1", awayFormation: "4-4-2",
-      stats: { shots: [9, 9], shotsOnTarget:, possession: ["51%", "49%"], corners:, fouls: [10, 11], yellowCards:, offsides: },
+      stats: { shots: [9, 9], shotsOnTarget:, possession: ["51%", "49%"], corners: [5, 4], fouls: [10, 11], yellowCards:, offsides: },
       homeLineup: ["1. 迪奧 (GK)", "4. 施維斯特 (DF)", "7. 馬連奴 (MF - 55' ⚽)", "9. 基達 (FW)"],
       awayLineup: ["1. 域陀 (GK)", "3. 羅拔 (DF)", "10. 蘇馬 (MF - 78' ⚽)", "11. 賓森馬 (FW)"]
     },
@@ -567,7 +706,7 @@
       venue: "韋洛德羅姆球場 (Orange Vélodrome)", city: "法國 · 馬賽", capacity: "67,394 人",
       hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-4-2",
-      stats: { shots:, shotsOnTarget:, possession: ["61%", "39%"], corners:, fouls: [8, 12], yellowCards:, offsides: },
+      stats: { shots: [16, 5], shotsOnTarget:, possession: ["61%", "39%"], corners:, fouls: [8, 12], yellowCards:, offsides: },
       homeLineup: ["1. 魯利 (GK)", "5. 巴利迪 (DF)", "21. 朗治亞 (MF - 52' ⚽)", "10. 格連活特 (FW - 64' ⚽, 82' ⚽)", "9. 華希 (FW - 71' ⚽)"],
       awayLineup: ["1. 比杜域 (GK)", "4. 索維 (DF)", "8. 山度士 (MF)", "11. 迪亞拉 (FW)"]
     },
@@ -577,7 +716,7 @@
       venue: "比亞韋斯托克市立體育場", city: "波蘭 · 比亞韋斯托克", capacity: "22,386 人",
       hktTime: "2026-08-21 02:45 (UTC+8)", localTime: "2026-08-20 20:45 (UTC+2 CEST)",
       homeFormation: "4-4-2", awayFormation: "4-5-1",
-      stats: { shots:, shotsOnTarget:, possession: ["58%", "42%"], corners:, fouls: [10, 13], yellowCards:, offsides: },
+      stats: { shots: [15, 6], shotsOnTarget:, possession: ["58%", "42%"], corners:, fouls: [10, 13], yellowCards:, offsides: },
       homeLineup: ["1. 阿巴拉莫域治 (GK)", "3. 沙切克 (DF)", "6. 羅曼卓克 (MF)", "10. 伊馬斯 (FW - 14' ⚽, 38' ⚽)", "9. 普魯魯 (FW - 56' ⚽)"],
       awayLineup: ["1. 馬卡里澤 (GK)", "4. 塔比澤 (DF)", "7. 科赫雷澤 (MF)", "9. 希哈德澤 (FW)"]
     }
@@ -664,7 +803,7 @@
     }
     empty.style.display = 'none';
 
-    list.innerHTML = filtered.map(m => {
+    list.innerHTML = filtered.map((m, idx) => {
       const match = ['1:0','2:0','0:1','0:2'].includes(m.ht);
       return `
         <div class="match-item ${match ? 'matched-ht' : ''}" onclick="openDetail(${matches.indexOf(m)})">
@@ -707,7 +846,7 @@
 
     const s = m.stats || {
       shots: [10, 8], shotsOnTarget:, possession: ["50%", "50%"],
-      corners:, fouls: [10, 10], yellowCards:, offsides:
+      corners: [5, 4], fouls: [10, 10], yellowCards:, offsides:
     };
     renderStatsTab(s);
 
@@ -782,16 +921,9 @@
     document.getElementById('detailModal').classList.remove('show');
   }
 
-  async function toggleNotifications() {
-    if ('Notification' in window && Notification.permission !== 'granted') {
-      const p = await Notification.requestPermission();
-      if (p === 'granted') new Notification('⚽ 賽果通知已開啟', { body: '有符合半場 1:0/2:0/0:1/0:2 賽果時將即時推播。' });
-    }
-  }
-
   function exportCSV() {
-    let csv = '\\uFEFF球賽編號,日期,聯賽,主隊,客隊,全場,半場\\n';
-    matches.forEach(m => csv += `"${m.code}","${m.date}","${m.league}","${m.home}","${m.away}","${m.ft}","${m.ht}"\\n`);
+    let csv = '\uFEFF球賽編號,日期,聯賽,主隊,客隊,全場,半場\n';
+    matches.forEach(m => csv += `"${m.code}","${m.date}","${m.league}","${m.home}","${m.away}","${m.ft}","${m.ht}"\n`);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -801,12 +933,3 @@
 </script>
 </body>
 </html>
-"""
-
-with open("/working_dir/c_f301bb9602597c5b/index.html", "w") as f:
-    f.write(html_code)
-
-print("Saved updated index.html with FB codes and match details!")
-EOF
-python3 /working_dir/c_f301bb9602597c5b/build_hkjc_with_fb.py
-}}
