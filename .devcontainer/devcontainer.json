@@ -1,0 +1,19 @@
+{
+  "name": "HKJC Football Tracker Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ritwickdey.LiveServer",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      }
+    }
+  },
+  "forwardPorts": [5500],
+  "postCreateCommand": "echo 'Codespaces Ready! Run Live Server or python scripts/update_scores.py'"
+}
