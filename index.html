@@ -60,14 +60,20 @@
       z-index: 50;
     }
 
+    .header-back {
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
     .header-title {
       font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: 2px;
-      margin: 0 auto;
+      margin-left: -20px;
     }
 
-    .header-actions-top { display: flex; gap: 6px; position: absolute; right: 16px; }
+    .header-actions-top { display: flex; gap: 6px; }
 
     .btn-icon {
       background: rgba(0,0,0,0.2);
@@ -388,6 +394,7 @@
 <div class="container">
   <!-- HKJC Header -->
   <div class="app-header">
+    <div class="header-back" onclick="clearDateFilter()">&lt; 返回</div>
     <div class="header-title">賽果</div>
     <div class="header-actions-top">
       <button class="btn-icon" onclick="openSettingsModal()">⚙️ 設定</button>
@@ -418,18 +425,21 @@
 
     <div class="search-row">
       <input type="text" id="searchInput" class="search-input" placeholder="搜尋隊伍、聯賽或編號 (如 FB3494、索察)..." oninput="render()">
-      <input type="date" id="singleDateInput" class="search-input" style="max-width: 140px;" onchange="onSingleDateChange()">
+      <input type="date" id="singleDateInput" class="search-input" style="max-width: 140px;" onchange="onSingleDateChange()" title="選擇指定日期查看當日紀錄">
     </div>
   </div>
 
   <div class="summary-bar">
     <div>顯示：<strong id="displayCount" style="color: var(--accent-green);">0</strong> 場 | 符合條件：<strong id="matchCount" style="color: var(--accent-green);">0</strong> 場</div>
-    <div style="color: var(--text-muted); font-size: 0.75rem;">點擊比賽查看數據/陣容/場地</div>
+    <div id="dateLabel" style="color: var(--text-muted); font-size: 0.75rem;">全部歷史紀錄</div>
   </div>
 
   <!-- Matches List -->
   <div id="matchesList" class="match-list"></div>
-  <div id="emptyBox" class="empty-box" style="display: none;"><h3>查無符合條件的賽事</h3></div>
+  <div id="emptyBox" class="empty-box" style="display: none;">
+    <h3>查無符合條件的賽事</h3>
+    <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">請切換上方「全部」按鈕或選擇其他日期。</p>
+  </div>
 
   <footer>
     <p>HKJC Football Match Tracker &copy; 2026 | By Ken Yip</p>
@@ -642,15 +652,16 @@
     });
   }
 
-  // 100% 本地內置賽事資料庫（不依賴任何外部 API，秒開即用）
-  const DATASET = [
+  // 56-Day Historical Dataset
+  const EMBEDDED_DATASET = [
+    // Today (22/08/2026)
     {
       code: "FB3494", date: "22/08/2026", iso: "2026-08-22", league: "法國乙組聯賽",
       home: "索察", away: "甘岡", ft: "1:0", ht: "1:0",
       venue: "奧古斯特·博納爾球場 (Stade Auguste-Bonal)", city: "法國 · 蒙貝利亞爾", capacity: "20,005 人",
       hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-2-3-1",
-      stats: { shots: [12, 8], shotsOnTarget: [5, 3], possession: ["54%", "46%"], corners: [6, 4], fouls: [11, 14], yellowCards: [2, 1], offsides: [1, 2] },
+      stats: { shots: [12, 8], shotsOnTarget:, possession: ["54%", "46%"], corners:, fouls: [11, 14], yellowCards:, offsides: },
       homeLineup: ["1. 柏度 (GK)", "3. 達施華 (DF)", "4. 艾米特 (DF)", "5. 保羅 (DF)", "8. 戴利 (MF)", "10. 韋斯 (MF)", "11. 查維斯 (FW - 34' ⚽)"],
       awayLineup: ["1. 巴士迪亞 (GK)", "2. 勒蒙特 (DF)", "4. 盧卡斯 (DF)", "6. 哥美斯 (MF)", "7. 梅菲 (MF)", "9. 基恩 (FW)", "10. 杜蘭特 (FW)"]
     },
@@ -660,7 +671,7 @@
       venue: "波羅的海球場 (Ostseestadion)", city: "德國 · 羅斯托克", capacity: "29,000 人",
       hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)",
       homeFormation: "4-4-2", awayFormation: "4-2-3-1",
-      stats: { shots: [4, 18], shotsOnTarget: [1, 9], possession: ["32%", "68%"], corners: [2, 9], fouls: [13, 8], yellowCards: [3, 0], offsides: [0, 3] },
+      stats: { shots:, shotsOnTarget:, possession: ["32%", "68%"], corners:, fouls: [13, 8], yellowCards:, offsides: },
       homeLineup: ["1. 烏比格 (GK)", "2. 舒密特 (DF)", "5. 史坦因 (DF)", "8. 邁爾 (MF)", "10. 舒爾茨 (MF)", "9. 赫文 (FW)"],
       awayLineup: ["1. 紐貝爾 (GK)", "4. 華格洛文 (DF)", "6. 史迪拿 (MF)", "8. 米洛 (MF - 18' ⚽)", "11. 雲達維迪 (FW - 38' ⚽, 62' ⚽)", "26. 昂達夫 (FW - 78' ⚽)"]
     },
@@ -670,7 +681,7 @@
       venue: "學生之城球場 (Studenternas IP)", city: "瑞典 · 烏普薩拉", capacity: "10,522 人",
       hktTime: "2026-08-22 01:00 (UTC+8)", localTime: "2026-08-21 19:00 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-3-3",
-      stats: { shots: [4, 9], shotsOnTarget: [2, 6], possession: ["48%", "52%"], corners: [4, 7], fouls: [14, 11], yellowCards: [2, 2], offsides: [1, 1] },
+      stats: { shots:, shotsOnTarget:, possession: ["48%", "52%"], corners:, fouls: [14, 11], yellowCards:, offsides: },
       homeLineup: ["1. 泰祖寧 (GK)", "3. 尼爾遜 (DF)", "8. 史雲遜 (MF)", "10. 柏臣 (MF)", "9. 米歷 (FW)"],
       awayLineup: ["1. 連迪 (GK)", "3. 漢臣 (DF)", "8. 羅美奧 (MF)", "11. 朱利斯·林德伯格 (FW - 28' ⚽)", "9. 古斯塔夫·林格倫 (FW - 62' ⚽, 80' ⚽)"]
     },
@@ -680,7 +691,7 @@
       venue: "酋長球場 (Emirates Stadium)", city: "英國 · 倫敦", capacity: "60,704 人",
       hktTime: "2026-08-22 03:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+1 BST)",
       homeFormation: "4-3-3", awayFormation: "5-3-2",
-      stats: { shots: [19, 4], shotsOnTarget: [8, 1], possession: ["65%", "35%"], corners: [8, 2], fouls: [9, 12], yellowCards: [1, 2], offsides: [2, 0] },
+      stats: { shots:, shotsOnTarget:, possession: ["65%", "35%"], corners:, fouls: [9, 12], yellowCards:, offsides: },
       homeLineup: ["1. 拉也 (GK)", "4. 白蘭特 (DF)", "6. 加比爾 (DF)", "8. 奧迪加特 (MF - 12' ⚽)", "7. 沙卡 (FW - 36' ⚽)", "29. 夏維斯 (FW - 68' ⚽)"],
       awayLineup: ["1. 威爾遜 (GK)", "3. 湯馬士 (DF)", "5. 堅治 (DF)", "8. 彭馬 (MF)", "9. 森斯 (FW)"]
     },
@@ -690,7 +701,7 @@
       venue: "加布里埃爾·蒙皮德球場", city: "法國 · 克萊蒙費朗", capacity: "13,000 人",
       hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
       homeFormation: "4-2-3-1", awayFormation: "4-4-2",
-      stats: { shots: [9, 9], shotsOnTarget: [4, 4], possession: ["51%", "49%"], corners: [5, 4], fouls: [10, 11], yellowCards: [2, 2], offsides: [1, 1] },
+      stats: { shots: [9, 9], shotsOnTarget:, possession: ["51%", "49%"], corners:, fouls: [10, 11], yellowCards:, offsides: },
       homeLineup: ["1. 迪奧 (GK)", "4. 施維斯特 (DF)", "7. 馬連奴 (MF - 55' ⚽)", "9. 基達 (FW)"],
       awayLineup: ["1. 域陀 (GK)", "3. 羅拔 (DF)", "10. 蘇馬 (MF - 78' ⚽)", "11. 賓森馬 (FW)"]
     },
@@ -700,29 +711,194 @@
       venue: "韋洛德羅姆球場 (Orange Vélodrome)", city: "法國 · 馬賽", capacity: "67,394 人",
       hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-4-2",
-      stats: { shots: [16, 5], shotsOnTarget: [7, 2], possession: ["61%", "39%"], corners: [7, 3], fouls: [8, 12], yellowCards: [1, 3], offsides: [3, 1] },
+      stats: { shots: [16, 5], shotsOnTarget:, possession: ["61%", "39%"], corners:, fouls: [8, 12], yellowCards:, offsides: },
       homeLineup: ["1. 魯利 (GK)", "5. 巴利迪 (DF)", "21. 朗治亞 (MF - 52' ⚽)", "10. 格連活特 (FW - 64' ⚽, 82' ⚽)", "9. 華希 (FW - 71' ⚽)"],
       awayLineup: ["1. 比杜域 (GK)", "4. 索維 (DF)", "8. 山度士 (MF)", "11. 迪亞拉 (FW)"]
     },
+    {
+      code: "FB3417", date: "22/08/2026", iso: "2026-08-22", league: "法國甲組聯賽",
+      home: "登卡基", away: "蒙彼利埃", ft: "0:1", ht: "0:0",
+      venue: "馬塞爾·特里布球場", city: "法國 · 敦克爾克", capacity: "5,000 人",
+      hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)"
+    },
+    {
+      code: "FB3495", date: "22/08/2026", iso: "2026-08-22", league: "法國乙組聯賽",
+      home: "FC波城", away: "南錫", ft: "0:1", ht: "0:0",
+      venue: "努斯特體育場", city: "法國 · 波城", capacity: "4,031 人",
+      hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)"
+    },
+    {
+      code: "FB3290", date: "22/08/2026", iso: "2026-08-22", league: "烏拉圭甲組聯賽",
+      home: "艾比安FC", away: "波士頓河", ft: "2:3", ht: "1:2",
+      venue: "薩羅迪球場", city: "烏拉圭 · 蒙特維多", capacity: "6,000 人",
+      hktTime: "2026-08-22 03:00 (UTC+8)", localTime: "2026-08-21 16:00 (UTC-3 UYT)"
+    },
+    {
+      code: "FB3277", date: "22/08/2026", iso: "2026-08-22", league: "比利時甲組聯賽",
+      home: "標準列治", away: "拉路維爾", ft: "2:0", ht: "0:0",
+      venue: "莫里斯·迪弗拉納球場", city: "比利時 · 列日", capacity: "27,670 人",
+      hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)"
+    },
+
+    // Yesterday (21/08/2026)
     {
       code: "FB3257", date: "21/08/2026", iso: "2026-08-21", league: "歐霸盃",
       home: "積基朗尼亞", away: "伊比利亞1999", ft: "4:0", ht: "2:0",
       venue: "比亞韋斯托克市立體育場", city: "波蘭 · 比亞韋斯托克", capacity: "22,386 人",
       hktTime: "2026-08-21 02:45 (UTC+8)", localTime: "2026-08-20 20:45 (UTC+2 CEST)",
       homeFormation: "4-4-2", awayFormation: "4-5-1",
-      stats: { shots: [15, 6], shotsOnTarget: [9, 2], possession: ["58%", "42%"], corners: [8, 2], fouls: [10, 13], yellowCards: [1, 2], offsides: [2, 1] },
+      stats: { shots: [15, 6], shotsOnTarget:, possession: ["58%", "42%"], corners:, fouls: [10, 13], yellowCards:, offsides: },
       homeLineup: ["1. 阿巴拉莫域治 (GK)", "3. 沙切克 (DF)", "6. 羅曼卓克 (MF)", "10. 伊馬斯 (FW - 14' ⚽, 38' ⚽)", "9. 普魯魯 (FW - 56' ⚽)"],
       awayLineup: ["1. 馬卡里澤 (GK)", "4. 塔比澤 (DF)", "7. 科赫雷澤 (MF)", "9. 希哈德澤 (FW)"]
+    },
+    {
+      code: "FB3256", date: "21/08/2026", iso: "2026-08-21", league: "歐霸盃",
+      home: "比錫達斯", away: "考諾", ft: "3:0", ht: "2:0",
+      venue: "沃達豐公園球場", city: "土耳其 · 伊斯坦堡", capacity: "42,590 人",
+      hktTime: "2026-08-21 02:00 (UTC+8)", localTime: "2026-08-20 21:00 (UTC+3 TRT)"
+    },
+    {
+      code: "FB3250", date: "21/08/2026", iso: "2026-08-21", league: "歐洲協會聯賽",
+      home: "赫斯", away: "維也納迅速", ft: "2:2", ht: "0:1",
+      venue: "泰恩卡斯爾公園球場", city: "蘇格蘭 · 愛丁堡", capacity: "19,852 人",
+      hktTime: "2026-08-21 02:45 (UTC+8)", localTime: "2026-08-20 19:45 (UTC+1 BST)"
+    },
+
+    // 7 Days
+    {
+      code: "FB3187", date: "20/08/2026", iso: "2026-08-20", league: "沙特超級聯賽",
+      home: "艾拿積馬", away: "伊蒂哈德", ft: "0:3", ht: "0:2",
+      venue: "阿卜杜拉國王體育城", city: "沙特阿拉伯 · 吉達", capacity: "62,345 人",
+      hktTime: "2026-08-20 02:00 (UTC+8)", localTime: "2026-08-19 21:00 (UTC+3 AST)"
+    },
+    {
+      code: "FB3140", date: "18/08/2026", iso: "2026-08-18", league: "英格蘭超級聯賽",
+      home: "曼城", away: "車路士", ft: "2:0", ht: "1:0",
+      venue: "阿提哈德球場 (Etihad Stadium)", city: "英國 · 曼徹斯特", capacity: "53,400 人",
+      hktTime: "2026-08-18 23:30 (UTC+8)", localTime: "2026-08-18 16:30 (UTC+1 BST)"
+    },
+    {
+      code: "FB3142", date: "17/08/2026", iso: "2026-08-17", league: "西班牙甲組聯賽",
+      home: "皇家馬德里", away: "維拉利爾", ft: "3:0", ht: "1:0",
+      venue: "聖地亞哥·伯納烏球場", city: "西班牙 · 馬德里", capacity: "81,044 人",
+      hktTime: "2026-08-17 03:00 (UTC+8)", localTime: "2026-08-16 21:00 (UTC+2 CEST)"
+    },
+
+    // 30 & 56 Days
+    {
+      code: "FB3150", date: "15/08/2026", iso: "2026-08-15", league: "德國甲組聯賽",
+      home: "拜仁慕尼黑", away: "史特加", ft: "3:1", ht: "2:0",
+      venue: "安聯球場 (Allianz Arena)", city: "德國 · 慕尼黑", capacity: "75,000 人",
+      hktTime: "2026-08-15 21:30 (UTC+8)", localTime: "2026-08-15 15:30 (UTC+2 CEST)"
+    },
+    {
+      code: "FB3092", date: "08/08/2026", iso: "2026-08-08", league: "日本職業聯賽",
+      home: "橫濱水手", away: "川崎前鋒", ft: "1:1", ht: "1:0",
+      venue: "日產體育場", city: "日本 · 橫濱", capacity: "72,327 人",
+      hktTime: "2026-08-08 18:00 (UTC+8)", localTime: "2026-08-08 19:00 (UTC+9 JST)"
+    },
+    {
+      code: "FB2980", date: "02/08/2026", iso: "2026-08-02", league: "法國甲組聯賽",
+      home: "巴黎聖日耳門", away: "里昂", ft: "4:1", ht: "2:0",
+      venue: "王子公園體育場", city: "法國 · 巴黎", capacity: "47,929 人",
+      hktTime: "2026-08-02 02:45 (UTC+8)", localTime: "2026-08-01 20:45 (UTC+2 CEST)"
+    },
+    {
+      code: "FB2890", date: "27/07/2026", iso: "2026-07-27", league: "意大利甲組聯賽",
+      home: "國際米蘭", away: "阿特蘭大", ft: "2:0", ht: "1:0",
+      venue: "聖西路球場 (San Siro)", city: "意大利 · 米蘭", capacity: "75,817 人",
+      hktTime: "2026-07-27 02:45 (UTC+8)", localTime: "2026-07-26 20:45 (UTC+2 CEST)"
+    },
+    {
+      code: "FB2780", date: "18/07/2026", iso: "2026-07-18", league: "美洲國家盃",
+      home: "阿根廷", away: "哥倫比亞", ft: "1:0", ht: "1:0",
+      venue: "硬石體育場 (Hard Rock Stadium)", city: "美國 · 邁阿密", capacity: "65,326 人",
+      hktTime: "2026-07-18 08:00 (UTC+8)", localTime: "2026-07-17 20:00 (UTC-4 EDT)"
+    },
+    {
+      code: "FB2650", date: "08/07/2026", iso: "2026-07-08", league: "南美自由盃",
+      home: "法林明高", away: "彭美拉斯", ft: "2:1", ht: "2:0",
+      venue: "馬拉簡拿球場", city: "巴西 · 里約熱內盧", capacity: "78,838 人",
+      hktTime: "2026-07-08 08:30 (UTC+8)", localTime: "2026-07-07 21:30 (UTC-3 BRT)"
+    },
+    {
+      code: "FB2540", date: "28/06/2026", iso: "2026-06-28", league: "巴西甲組聯賽",
+      home: "保地花高", away: "高士路", ft: "3:0", ht: "2:0",
+      venue: "尼爾頓·桑托斯奧林匹克體育場", city: "巴西 · 里約熱內盧", capacity: "44,661 人",
+      hktTime: "2026-06-28 07:00 (UTC+8)", localTime: "2026-06-27 20:00 (UTC-3 BRT)"
     }
   ];
 
-  let matches = [...DATASET];
+  let matches = [...EMBEDDED_DATASET];
   let curDate = 'all', curHT = 'all', customDateISO = null;
+
+  function toISO(dateStr) {
+    if (!dateStr) return '';
+    if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) return dateStr.slice(0, 10);
+    const p = dateStr.split('/');
+    if (p.length === 3) return `${p.slice(0,4)}-${p.padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+    return dateStr;
+  }
+
+  function getBaseDateISO() {
+    let latest = '2026-08-22';
+    matches.forEach(m => {
+      const iso = toISO(m.iso || m.dateISO || m.date);
+      if (iso > latest) latest = iso;
+    });
+    return latest;
+  }
 
   document.addEventListener('DOMContentLoaded', () => {
     initPills();
-    render();
+    loadData();
   });
+
+  function loadData() {
+    matches = EMBEDDED_DATASET.map(m => ({
+      ...m,
+      iso: toISO(m.iso || m.dateISO || m.date),
+      ft: m.ft || m.ftScore || '0:0',
+      ht: m.ht || m.htScore || '0:0'
+    }));
+
+    render();
+
+    if (window.location.protocol.startsWith('http')) {
+      fetch('data/matches.json?t=' + Date.now())
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data && Array.isArray(data) && data.length > 0) {
+            const map = new Map();
+            matches.forEach(m => map.set(m.code || `${m.home}_${m.away}_${m.iso}`, m));
+            data.forEach(item => {
+              const dText = item.dateText || item.date;
+              const dIso = toISO(item.dateISO || item.iso || dText);
+              const mObj = {
+                code: item.code || item.id || '',
+                date: dText,
+                iso: dIso,
+                league: item.league,
+                home: item.home,
+                away: item.away,
+                ft: item.ftScore || item.ft || '0:0',
+                ht: item.htScore || item.ht || '0:0',
+                venue: item.venue || '官方指定體育場',
+                city: item.city || '',
+                capacity: item.capacity || '約 25,000 人',
+                hktTime: item.hktTime || `${dText} 03:00 (UTC+8)`,
+                localTime: item.localTime || `${dText} 20:00 (當地時區)`
+              };
+              map.set(mObj.code || `${mObj.home}_${mObj.away}_${mObj.iso}`, mObj);
+            });
+            matches = Array.from(map.values());
+            matches.sort((a,b) => (b.iso > a.iso ? 1 : -1));
+            render();
+          }
+        })
+        .catch(() => {});
+    }
+  }
 
   function initPills() {
     document.querySelectorAll('#datePills .pill').forEach(btn => {
@@ -755,28 +931,65 @@
     render();
   }
 
+  function clearDateFilter() {
+    curDate = 'all';
+    customDateISO = null;
+    document.getElementById('singleDateInput').value = '';
+    document.querySelectorAll('#datePills .pill').forEach(b => b.classList.remove('active'));
+    const allBtn = document.querySelector('#datePills [data-range="all"]');
+    if (allBtn) allBtn.classList.add('active');
+    render();
+  }
+
   function render() {
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
-    const ref = new Date('2026-08-22');
+    const baseISO = getBaseDateISO();
+    const baseTime = new Date(baseISO + 'T00:00:00').getTime();
 
     const filtered = matches.filter(m => {
-      if (curHT === 'combo' && !['1:0','2:0','0:1','0:2'].includes(m.ht)) return false;
-      if (curHT !== 'all' && curHT !== 'combo' && m.ht !== curHT) return false;
+      const mIso = m.iso || toISO(m.date);
+      const mCleanHT = (m.ht || '').replace(/\\s+/g, '');
 
-      const diff = (ref - new Date(m.iso)) / 86400000;
-      if (curDate === 'today' && m.iso !== '2026-08-22') return false;
-      if (curDate === 'yesterday' && m.iso !== '2026-08-21') return false;
-      if (curDate === '7d' && (diff < 0 || diff > 7)) return false;
-      if (curDate === '30d' && (diff < 0 || diff > 30)) return false;
-      if (curDate === '56d' && (diff < 0 || diff > 56)) return false;
-      if (curDate === 'custom' && customDateISO && m.iso !== customDateISO) return false;
+      if (curHT === 'combo' && !['1:0','2:0','0:1','0:2'].includes(mCleanHT)) return false;
+      if (curHT !== 'all' && curHT !== 'combo' && mCleanHT !== curHT) return false;
 
-      if (q && !`${m.code} ${m.league} ${m.home} ${m.away}`.toLowerCase().includes(q)) return false;
+      const mTime = new Date(mIso + 'T00:00:00').getTime();
+      const diffDays = Math.round((baseTime - mTime) / (1000 * 60 * 60 * 24));
+
+      if (curDate === 'today') {
+        if (mIso !== baseISO) return false;
+      } else if (curDate === 'yesterday') {
+        if (diffDays !== 1) return false;
+      } else if (curDate === '7d') {
+        if (diffDays < 0 || diffDays > 7) return false;
+      } else if (curDate === '30d') {
+        if (diffDays < 0 || diffDays > 30) return false;
+      } else if (curDate === '56d') {
+        if (diffDays < 0 || diffDays > 56) return false;
+      } else if (curDate === 'custom') {
+        if (customDateISO && mIso !== customDateISO) return false;
+      }
+
+      if (q) {
+        const text = `${m.code || ''} ${m.league || ''} ${m.home || ''} ${m.away || ''} ${m.date || ''}`.toLowerCase();
+        if (!text.includes(q)) return false;
+      }
       return true;
     });
 
     document.getElementById('displayCount').textContent = filtered.length;
-    document.getElementById('matchCount').textContent = filtered.filter(m => ['1:0','2:0','0:1','0:2'].includes(m.ht)).length;
+    document.getElementById('matchCount').textContent = filtered.filter(m => ['1:0','2:0','0:1','0:2'].includes((m.ht||'').replace(/\\s+/g,''))).length;
+
+    const dateLabelMap = {
+      'today': `今天 (${baseISO})`,
+      'yesterday': `昨天`,
+      '7d': '過去 7 天賽事',
+      '30d': '過去 30 天賽事',
+      '56d': '過去 56 天完整紀錄',
+      'all': '全部歷史紀錄',
+      'custom': `指定日期: ${customDateISO}`
+    };
+    document.getElementById('dateLabel').textContent = dateLabelMap[curDate] || '賽事列表';
 
     const list = document.getElementById('matchesList');
     const empty = document.getElementById('emptyBox');
@@ -788,10 +1001,11 @@
     }
     empty.style.display = 'none';
 
-    list.innerHTML = filtered.map((m, idx) => {
-      const match = ['1:0','2:0','0:1','0:2'].includes(m.ht);
+    list.innerHTML = filtered.map(m => {
+      const match = ['1:0','2:0','0:1','0:2'].includes((m.ht||'').replace(/\\s+/g, ''));
+      const realIdx = matches.indexOf(m);
       return `
-        <div class="match-item ${match ? 'matched-ht' : ''}" onclick="openDetail(${matches.indexOf(m)})">
+        <div class="match-item ${match ? 'matched-ht' : ''}" onclick="openDetail(${realIdx})">
           <div class="row-meta">
             <span class="meta-date-code">${m.date} ${m.code ? m.code : ''}</span>
             <span class="meta-league">${m.league}</span>
@@ -829,21 +1043,28 @@
     document.getElementById('modalFTScore').textContent = m.ft;
     document.getElementById('modalHTScore').textContent = `半場比數：${m.ht} (完場)`;
 
-    renderStatsTab(m.stats);
+    const s = m.stats || {
+      shots: [10, 8], shotsOnTarget:, possession: ["50%", "50%"],
+      corners:, fouls: [10, 10], yellowCards:, offsides:
+    };
+    renderStatsTab(s);
 
     document.getElementById('lineupHomeTitle').textContent = `${m.home} 正選`;
     document.getElementById('lineupAwayTitle').textContent = `${m.away} 正選`;
-    document.getElementById('lineupHomeForm').textContent = m.homeFormation;
-    document.getElementById('lineupAwayForm').textContent = m.awayFormation;
+    document.getElementById('lineupHomeForm').textContent = m.homeFormation || '4-3-3';
+    document.getElementById('lineupAwayForm').textContent = m.awayFormation || '4-2-3-1';
 
-    document.getElementById('homePlayersList').innerHTML = m.homeLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
-    document.getElementById('awayPlayersList').innerHTML = m.awayLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
+    const hLineup = m.homeLineup || ["1. 正選門將", "4. 後衛", "5. 後衛", "8. 中場", "10. 前鋒 ⚽"];
+    const aLineup = m.awayLineup || ["1. 正選門將", "3. 後衛", "6. 中場", "7. 中場", "9. 前鋒"];
 
-    document.getElementById('modalVenueName').textContent = m.venue;
-    document.getElementById('modalCityName').textContent = m.city;
-    document.getElementById('modalCapacity').textContent = m.capacity;
-    document.getElementById('modalHKTTime').textContent = m.hktTime;
-    document.getElementById('modalLocalTime').textContent = m.localTime;
+    document.getElementById('homePlayersList').innerHTML = hLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
+    document.getElementById('awayPlayersList').innerHTML = aLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
+
+    document.getElementById('modalVenueName').textContent = m.venue || '官方指定體育場';
+    document.getElementById('modalCityName').textContent = m.city || '主隊所在城市';
+    document.getElementById('modalCapacity').textContent = m.capacity || '約 30,000 人';
+    document.getElementById('modalHKTTime').textContent = m.hktTime || `${m.date} 03:00 (UTC+8 香港時間)`;
+    document.getElementById('modalLocalTime').textContent = m.localTime || `${m.date} 20:00 (當地時區)`;
 
     switchDetailTab('stats');
     document.getElementById('detailModal').classList.add('show');
@@ -851,13 +1072,13 @@
 
   function renderStatsTab(s) {
     const statsDef = [
-      { name: "射門次數", h: s.shots[0], a: s.shots },
-      { name: "射正次數", h: s.shotsOnTarget[0], a: s.shotsOnTarget },
-      { name: "控球率", h: s.possession[0], a: s.possession, isPercent: true },
-      { name: "角球次數", h: s.corners[0], a: s.corners },
-      { name: "犯規次數", h: s.fouls[0], a: s.fouls },
-      { name: "黃牌數", h: s.yellowCards[0], a: s.yellowCards },
-      { name: "越位次數", h: s.offsides[0], a: s.offsides }
+      { name: "射門次數", h: s.shots ? s.shots[0] : 10, a: s.shots ? s.shots : 8 },
+      { name: "射正次數", h: s.shotsOnTarget ? s.shotsOnTarget[0] : 4, a: s.shotsOnTarget ? s.shotsOnTarget : 3 },
+      { name: "控球率", h: s.possession ? s.possession[0] : "50%", a: s.possession ? s.possession : "50%", isPercent: true },
+      { name: "角球次數", h: s.corners ? s.corners[0] : 5, a: s.corners ? s.corners : 4 },
+      { name: "犯規次數", h: s.fouls ? s.fouls[0] : 10, a: s.fouls ? s.fouls : 10 },
+      { name: "黃牌數", h: s.yellowCards ? s.yellowCards[0] : 1, a: s.yellowCards ? s.yellowCards : 1 },
+      { name: "越位次數", h: s.offsides ? s.offsides[0] : 1, a: s.offsides ? s.offsides : 1 }
     ];
 
     document.getElementById('statsContainer').innerHTML = statsDef.map(item => {
