@@ -1,0 +1,23 @@
+[
+  { "code": "FB2844", "league": "英格蘭超級聯賽", "datetime": "2026-08-22 03:00", "home": "阿仙奴", "away": "高雲地利", "htScore": "2:0", "ftScore": "3:0", "status": "完場" },
+  { "code": "FB3275", "league": "瑞典超級聯賽", "datetime": "2026-08-22 01:00", "home": "天狼星", "away": "赫根", "htScore": "0:1", "ftScore": "1:2", "status": "完場" },
+  { "code": "FB3295", "league": "沙特超級聯賽", "datetime": "2026-08-22 00:00", "home": "艾利雅德", "away": "艾納斯", "htScore": "0:2", "ftScore": "1:4", "status": "完場" },
+  { "code": "FB3257", "league": "歐霸盃", "datetime": "2026-08-21 02:45", "home": "積基朗尼亞", "away": "伊比利亞1999", "htScore": "2:0", "ftScore": "4:0", "status": "完場" },
+  { "code": "FB3256", "league": "歐霸盃", "datetime": "2026-08-21 01:00", "home": "比錫達斯", "away": "考諾", "htScore": "2:0", "ftScore": "3:0", "status": "完場" },
+  { "code": "FB3250", "league": "歐洲協會聯賽", "datetime": "2026-08-21 02:45", "home": "赫斯", "away": "維也納迅速", "htScore": "0:1", "ftScore": "2:2", "status": "完場" },
+  { "code": "FB3253", "league": "歐洲協會聯賽", "datetime": "2026-08-21 02:45", "home": "馬瑟韋爾", "away": "弗賴堡", "htScore": "1:1", "ftScore": "1:3", "status": "完場" },
+  { "code": "FB3249", "league": "歐洲協會聯賽", "datetime": "2026-08-21 00:00", "home": "國際杜古", "away": "哥本哈根", "htScore": "0:0", "ftScore": "0:0", "status": "完場" },
+  { "code": "FB3187", "league": "沙特超級聯賽", "datetime": "2026-08-20 02:00", "home": "艾拿積馬", "away": "伊蒂哈德", "htScore": "0:2", "ftScore": "0:3", "status": "完場" },
+  { "code": "FB3230", "league": "卡塔爾星級聯賽", "datetime": "2026-08-20 22:15", "home": "艾華卡拉", "away": "卡塔爾SC", "htScore": "1:0", "ftScore": "2:1", "status": "完場" },
+  { "code": "FB3140", "league": "英格蘭超級聯賽", "datetime": "2026-08-18 22:00", "home": "曼城", "away": "車路士", "htScore": "1:0", "ftScore": "2:0", "status": "完場" },
+  { "code": "FB3141", "league": "英格蘭超級聯賽", "datetime": "2026-08-18 22:00", "home": "利物浦", "away": "般尼茅夫", "htScore": "2:0", "ftScore": "4:1", "status": "完場" },
+  { "code": "FB3142", "league": "西班牙甲組聯賽", "datetime": "2026-08-17 03:30", "home": "皇家馬德里", "away": "維拉利爾", "htScore": "1:0", "ftScore": "3:0", "status": "完場" },
+  { "code": "FB3150", "league": "德國甲組聯賽", "datetime": "2026-08-15 21:30", "home": "拜仁慕尼黑", "away": "史特加", "htScore": "2:0", "ftScore": "3:1", "status": "完場" },
+  { "code": "FB3010", "league": "歐洲聯賽冠軍盃", "datetime": "2026-08-12 03:00", "home": "些路迪", "away": "卡拉伯克", "htScore": "1:0", "ftScore": "2:0", "status": "完場" },
+  { "code": "FB2985", "league": "日本職業聯賽", "datetime": "2026-08-07 18:30", "home": "神戶勝利船", "away": "浦和紅鑽", "htScore": "2:0", "ftScore": "2:0", "status": "完場" },
+  { "code": "FB2920", "league": "法國甲組聯賽", "datetime": "2026-08-02 02:45", "home": "巴黎聖日耳門", "away": "里昂", "htScore": "2:0", "ftScore": "4:1", "status": "完場" },
+  { "code": "FB2890", "league": "意大利甲組聯賽", "datetime": "2026-07-27 02:45", "home": "國際米蘭", "away": "阿特蘭大", "htScore": "1:0", "ftScore": "2:0", "status": "完場" },
+  { "code": "FB2750", "league": "美洲國家盃", "datetime": "2026-07-18 08:00", "home": "阿根廷", "away": "哥倫比亞", "htScore": "1:0", "ftScore": "1:0", "status": "完場" },
+  { "code": "FB2680", "league": "南美自由盃", "datetime": "2026-07-08 08:30", "home": "法林明高", "away": "彭美拉斯", "htScore": "2:0", "ftScore": "2:1", "status": "完場" },
+  { "code": "FB2615", "league": "巴西甲組聯賽", "datetime": "2026-06-28 07:30", "home": "保地花高", "away": "高士路", "htScore": "2:0", "ftScore": "3:0", "status": "完場" }
+]
