@@ -60,20 +60,14 @@
       z-index: 50;
     }
 
-    .header-back {
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
     .header-title {
       font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: 2px;
-      margin-left: -20px;
+      margin: 0 auto;
     }
 
-    .header-actions-top { display: flex; gap: 6px; }
+    .header-actions-top { display: flex; gap: 6px; position: absolute; right: 16px; }
 
     .btn-icon {
       background: rgba(0,0,0,0.2);
@@ -394,7 +388,6 @@
 <div class="container">
   <!-- HKJC Header -->
   <div class="app-header">
-    <div class="header-back" onclick="clearDateFilter()">&lt; 返回</div>
     <div class="header-title">賽果</div>
     <div class="header-actions-top">
       <button class="btn-icon" onclick="openSettingsModal()">⚙️ 設定</button>
@@ -408,9 +401,9 @@
       <button class="pill pill-blue" data-range="today">今天</button>
       <button class="pill pill-blue" data-range="yesterday">昨天</button>
       <button class="pill pill-blue" data-range="7d">7日</button>
-      <button class="pill-btn pill-blue" data-range="30d">30日</button>
-      <button class="pill-btn pill-blue" data-range="56d">56日</button>
-      <button class="pill-btn pill-blue active" data-range="all">全部</button>
+      <button class="pill pill-blue" data-range="30d">30日</button>
+      <button class="pill pill-blue" data-range="56d">56日</button>
+      <button class="pill pill-blue active" data-range="all">全部</button>
     </div>
 
     <div class="filter-row" id="htPills">
@@ -649,6 +642,7 @@
     });
   }
 
+  // 100% 本地內置賽事資料庫（不依賴任何外部 API，秒開即用）
   const DATASET = [
     {
       code: "FB3494", date: "22/08/2026", iso: "2026-08-22", league: "法國乙組聯賽",
@@ -656,7 +650,7 @@
       venue: "奧古斯特·博納爾球場 (Stade Auguste-Bonal)", city: "法國 · 蒙貝利亞爾", capacity: "20,005 人",
       hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-2-3-1",
-      stats: { shots: [12, 8], shotsOnTarget:, possession: ["54%", "46%"], corners: [6, 4], fouls: [11, 14], yellowCards:, offsides: },
+      stats: { shots: [12, 8], shotsOnTarget: [5, 3], possession: ["54%", "46%"], corners: [6, 4], fouls: [11, 14], yellowCards: [2, 1], offsides: [1, 2] },
       homeLineup: ["1. 柏度 (GK)", "3. 達施華 (DF)", "4. 艾米特 (DF)", "5. 保羅 (DF)", "8. 戴利 (MF)", "10. 韋斯 (MF)", "11. 查維斯 (FW - 34' ⚽)"],
       awayLineup: ["1. 巴士迪亞 (GK)", "2. 勒蒙特 (DF)", "4. 盧卡斯 (DF)", "6. 哥美斯 (MF)", "7. 梅菲 (MF)", "9. 基恩 (FW)", "10. 杜蘭特 (FW)"]
     },
@@ -666,7 +660,7 @@
       venue: "波羅的海球場 (Ostseestadion)", city: "德國 · 羅斯托克", capacity: "29,000 人",
       hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)",
       homeFormation: "4-4-2", awayFormation: "4-2-3-1",
-      stats: { shots: [4, 18], shotsOnTarget:, possession: ["32%", "68%"], corners:, fouls: [13, 8], yellowCards:, offsides: },
+      stats: { shots: [4, 18], shotsOnTarget: [1, 9], possession: ["32%", "68%"], corners: [2, 9], fouls: [13, 8], yellowCards: [3, 0], offsides: [0, 3] },
       homeLineup: ["1. 烏比格 (GK)", "2. 舒密特 (DF)", "5. 史坦因 (DF)", "8. 邁爾 (MF)", "10. 舒爾茨 (MF)", "9. 赫文 (FW)"],
       awayLineup: ["1. 紐貝爾 (GK)", "4. 華格洛文 (DF)", "6. 史迪拿 (MF)", "8. 米洛 (MF - 18' ⚽)", "11. 雲達維迪 (FW - 38' ⚽, 62' ⚽)", "26. 昂達夫 (FW - 78' ⚽)"]
     },
@@ -676,7 +670,7 @@
       venue: "學生之城球場 (Studenternas IP)", city: "瑞典 · 烏普薩拉", capacity: "10,522 人",
       hktTime: "2026-08-22 01:00 (UTC+8)", localTime: "2026-08-21 19:00 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-3-3",
-      stats: { shots: [4, 9], shotsOnTarget:, possession: ["48%", "52%"], corners: [4, 7], fouls: [14, 11], yellowCards:, offsides: },
+      stats: { shots: [4, 9], shotsOnTarget: [2, 6], possession: ["48%", "52%"], corners: [4, 7], fouls: [14, 11], yellowCards: [2, 2], offsides: [1, 1] },
       homeLineup: ["1. 泰祖寧 (GK)", "3. 尼爾遜 (DF)", "8. 史雲遜 (MF)", "10. 柏臣 (MF)", "9. 米歷 (FW)"],
       awayLineup: ["1. 連迪 (GK)", "3. 漢臣 (DF)", "8. 羅美奧 (MF)", "11. 朱利斯·林德伯格 (FW - 28' ⚽)", "9. 古斯塔夫·林格倫 (FW - 62' ⚽, 80' ⚽)"]
     },
@@ -686,7 +680,7 @@
       venue: "酋長球場 (Emirates Stadium)", city: "英國 · 倫敦", capacity: "60,704 人",
       hktTime: "2026-08-22 03:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+1 BST)",
       homeFormation: "4-3-3", awayFormation: "5-3-2",
-      stats: { shots: [19, 4], shotsOnTarget:, possession: ["65%", "35%"], corners:, fouls: [9, 12], yellowCards:, offsides: },
+      stats: { shots: [19, 4], shotsOnTarget: [8, 1], possession: ["65%", "35%"], corners: [8, 2], fouls: [9, 12], yellowCards: [1, 2], offsides: [2, 0] },
       homeLineup: ["1. 拉也 (GK)", "4. 白蘭特 (DF)", "6. 加比爾 (DF)", "8. 奧迪加特 (MF - 12' ⚽)", "7. 沙卡 (FW - 36' ⚽)", "29. 夏維斯 (FW - 68' ⚽)"],
       awayLineup: ["1. 威爾遜 (GK)", "3. 湯馬士 (DF)", "5. 堅治 (DF)", "8. 彭馬 (MF)", "9. 森斯 (FW)"]
     },
@@ -696,7 +690,7 @@
       venue: "加布里埃爾·蒙皮德球場", city: "法國 · 克萊蒙費朗", capacity: "13,000 人",
       hktTime: "2026-08-22 02:00 (UTC+8)", localTime: "2026-08-21 20:00 (UTC+2 CEST)",
       homeFormation: "4-2-3-1", awayFormation: "4-4-2",
-      stats: { shots: [9, 9], shotsOnTarget:, possession: ["51%", "49%"], corners: [5, 4], fouls: [10, 11], yellowCards:, offsides: },
+      stats: { shots: [9, 9], shotsOnTarget: [4, 4], possession: ["51%", "49%"], corners: [5, 4], fouls: [10, 11], yellowCards: [2, 2], offsides: [1, 1] },
       homeLineup: ["1. 迪奧 (GK)", "4. 施維斯特 (DF)", "7. 馬連奴 (MF - 55' ⚽)", "9. 基達 (FW)"],
       awayLineup: ["1. 域陀 (GK)", "3. 羅拔 (DF)", "10. 蘇馬 (MF - 78' ⚽)", "11. 賓森馬 (FW)"]
     },
@@ -706,7 +700,7 @@
       venue: "韋洛德羅姆球場 (Orange Vélodrome)", city: "法國 · 馬賽", capacity: "67,394 人",
       hktTime: "2026-08-22 02:45 (UTC+8)", localTime: "2026-08-21 20:45 (UTC+2 CEST)",
       homeFormation: "4-3-3", awayFormation: "4-4-2",
-      stats: { shots: [16, 5], shotsOnTarget:, possession: ["61%", "39%"], corners:, fouls: [8, 12], yellowCards:, offsides: },
+      stats: { shots: [16, 5], shotsOnTarget: [7, 2], possession: ["61%", "39%"], corners: [7, 3], fouls: [8, 12], yellowCards: [1, 3], offsides: [3, 1] },
       homeLineup: ["1. 魯利 (GK)", "5. 巴利迪 (DF)", "21. 朗治亞 (MF - 52' ⚽)", "10. 格連活特 (FW - 64' ⚽, 82' ⚽)", "9. 華希 (FW - 71' ⚽)"],
       awayLineup: ["1. 比杜域 (GK)", "4. 索維 (DF)", "8. 山度士 (MF)", "11. 迪亞拉 (FW)"]
     },
@@ -716,7 +710,7 @@
       venue: "比亞韋斯托克市立體育場", city: "波蘭 · 比亞韋斯托克", capacity: "22,386 人",
       hktTime: "2026-08-21 02:45 (UTC+8)", localTime: "2026-08-20 20:45 (UTC+2 CEST)",
       homeFormation: "4-4-2", awayFormation: "4-5-1",
-      stats: { shots: [15, 6], shotsOnTarget:, possession: ["58%", "42%"], corners:, fouls: [10, 13], yellowCards:, offsides: },
+      stats: { shots: [15, 6], shotsOnTarget: [9, 2], possession: ["58%", "42%"], corners: [8, 2], fouls: [10, 13], yellowCards: [1, 2], offsides: [2, 1] },
       homeLineup: ["1. 阿巴拉莫域治 (GK)", "3. 沙切克 (DF)", "6. 羅曼卓克 (MF)", "10. 伊馬斯 (FW - 14' ⚽, 38' ⚽)", "9. 普魯魯 (FW - 56' ⚽)"],
       awayLineup: ["1. 馬卡里澤 (GK)", "4. 塔比澤 (DF)", "7. 科赫雷澤 (MF)", "9. 希哈德澤 (FW)"]
     }
@@ -758,15 +752,6 @@
     document.querySelectorAll('#datePills .pill').forEach(b => b.classList.remove('active'));
     curDate = 'custom';
     customDateISO = val;
-    render();
-  }
-
-  function clearDateFilter() {
-    curDate = 'all';
-    customDateISO = null;
-    document.getElementById('singleDateInput').value = '';
-    document.querySelectorAll('#datePills .pill').forEach(b => b.classList.remove('active'));
-    document.querySelector('#datePills [data-range="all"]').classList.add('active');
     render();
   }
 
@@ -844,28 +829,21 @@
     document.getElementById('modalFTScore').textContent = m.ft;
     document.getElementById('modalHTScore').textContent = `半場比數：${m.ht} (完場)`;
 
-    const s = m.stats || {
-      shots: [10, 8], shotsOnTarget:, possession: ["50%", "50%"],
-      corners: [5, 4], fouls: [10, 10], yellowCards:, offsides:
-    };
-    renderStatsTab(s);
+    renderStatsTab(m.stats);
 
     document.getElementById('lineupHomeTitle').textContent = `${m.home} 正選`;
     document.getElementById('lineupAwayTitle').textContent = `${m.away} 正選`;
-    document.getElementById('lineupHomeForm').textContent = m.homeFormation || '4-3-3';
-    document.getElementById('lineupAwayForm').textContent = m.awayFormation || '4-2-3-1';
+    document.getElementById('lineupHomeForm').textContent = m.homeFormation;
+    document.getElementById('lineupAwayForm').textContent = m.awayFormation;
 
-    const hLineup = m.homeLineup || ["1. 正選門將", "4. 後衛", "5. 後衛", "8. 中場", "10. 前鋒 ⚽"];
-    const aLineup = m.awayLineup || ["1. 正選門將", "3. 後衛", "6. 中場", "7. 中場", "9. 前鋒"];
+    document.getElementById('homePlayersList').innerHTML = m.homeLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
+    document.getElementById('awayPlayersList').innerHTML = m.awayLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
 
-    document.getElementById('homePlayersList').innerHTML = hLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
-    document.getElementById('awayPlayersList').innerHTML = aLineup.map(p => `<div class="player-item"><span>${p}</span></div>`).join('');
-
-    document.getElementById('modalVenueName').textContent = m.venue || '官方指定體育場';
-    document.getElementById('modalCityName').textContent = m.city || '主隊所在城市';
-    document.getElementById('modalCapacity').textContent = m.capacity || '約 30,000 人';
-    document.getElementById('modalHKTTime').textContent = m.hktTime || `${m.date} 03:00 (UTC+8 香港時間)`;
-    document.getElementById('modalLocalTime').textContent = m.localTime || `${m.date} 20:00 (當地時區)`;
+    document.getElementById('modalVenueName').textContent = m.venue;
+    document.getElementById('modalCityName').textContent = m.city;
+    document.getElementById('modalCapacity').textContent = m.capacity;
+    document.getElementById('modalHKTTime').textContent = m.hktTime;
+    document.getElementById('modalLocalTime').textContent = m.localTime;
 
     switchDetailTab('stats');
     document.getElementById('detailModal').classList.add('show');
