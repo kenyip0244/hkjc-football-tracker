@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>⚽ HKJC 足球賽果半場篩選追蹤器</title>
 
-  <!-- PWA & Mobile App Meta Tags (Soccer Emoji Icon) -->
+  <!-- PWA Meta Tags (100% Self-Contained Soccer Emoji Icon) -->
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/svg+xml" href="icons/soccer.svg">
-  <link rel="apple-touch-icon" href="icons/soccer.svg">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%BD%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%BD%3C/text%3E%3C/svg%3E">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,518 +17,397 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-primary: #0b1120;
-      --bg-secondary: #1e293b;
-      --bg-card: #1e293b;
-      --border-color: #334155;
+      --bg-secondary: #162032;
+      --bg-card: #1a263c;
+      --border-color: #2a3a54;
       --accent-green: #10b981;
       --accent-blue: #38bdf8;
       --accent-amber: #f59e0b;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --highlight-bg: rgba(16, 185, 129, 0.12);
-      --highlight-border: rgba(16, 185, 129, 0.5);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 16px;
-      line-height: 1.5;
+      padding: 8px;
+      line-height: 1.35;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 820px;
       margin: 0 auto;
     }
 
-    /* Live Header */
-    header {
+    /* Compact Header */
+    .app-header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 8px 12px;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
       align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 16px;
-      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 6px;
     }
 
-    .title-group h1 {
-      font-size: 1.4rem;
+    .app-header h1 {
+      font-size: 1.02rem;
       font-weight: 800;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .live-indicator {
-      display: inline-flex;
-      align-items: center;
       gap: 6px;
-      font-size: 0.78rem;
-      color: var(--accent-green);
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 600;
+      white-space: nowrap;
     }
 
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--accent-green);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-green);
-      animation: pulse 1.8s infinite;
-    }
+    .header-actions { display: flex; gap: 5px; }
 
-    @keyframes pulse {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.3); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.8; }
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .btn-sm {
       background-color: var(--bg-secondary);
       color: var(--text-main);
       border: 1px solid var(--border-color);
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 0.84rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
     }
-
-    .btn:hover { background-color: #334155; border-color: #475569; }
+    .btn-sm:hover { background-color: #243247; }
     .btn-green { background-color: #059669; border-color: #10b981; color: #fff; }
-    .btn-blue { background-color: #0284c7; border-color: #38bdf8; color: #fff; }
 
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .stat-card {
+    /* Compact Filter Bar */
+    .filter-box {
       background-color: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 12px 16px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
       display: flex;
       flex-direction: column;
-    }
-
-    .stat-label {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-    }
-
-    .stat-val {
-      font-size: 1.55rem;
-      font-weight: 800;
-      margin-top: 4px;
-      color: #fff;
-    }
-
-    .stat-val.highlight { color: var(--accent-green); }
-
-    /* Filter Panel */
-    .filter-panel {
-      background-color: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .filter-label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      min-width: 80px;
-    }
-
-    .pill-group {
-      display: flex;
-      flex-wrap: wrap;
       gap: 6px;
     }
 
-    .pill-btn {
-      background-color: #0f172a;
-      border: 1px solid var(--border-color);
+    .chip-scroll-row {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      align-items: center;
+    }
+    .chip-scroll-row::-webkit-scrollbar { display: none; }
+
+    .row-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
       color: var(--text-muted);
-      padding: 5px 12px;
-      border-radius: 18px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex-shrink: 0;
+      min-width: 36px;
     }
 
-    .pill-btn:hover { border-color: #64748b; color: var(--text-main); }
-    .pill-btn.active {
+    .chip {
+      flex-shrink: 0;
+      background-color: #0b1120;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 3px 9px;
+      border-radius: 14px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover { color: #fff; border-color: #475569; }
+    .chip.active {
       background-color: var(--accent-green) !important;
       color: #042f2e !important;
       border-color: var(--accent-green) !important;
       font-weight: 800 !important;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
     }
-
-    .pill-btn.pill-blue.active {
+    .chip.chip-blue.active {
       background-color: var(--accent-blue) !important;
       color: #082f49 !important;
       border-color: var(--accent-blue) !important;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
     }
 
-    .input-control {
-      background-color: #0f172a;
+    .search-subrow {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-top: 2px;
+    }
+
+    .input-sm {
+      background-color: #0b1120;
       border: 1px solid var(--border-color);
       color: #fff;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
-      font-size: 0.84rem;
+      font-size: 0.78rem;
       outline: none;
     }
+    .input-sm:focus { border-color: var(--accent-blue); }
 
-    .input-control:focus { border-color: var(--accent-blue); }
-
-    .view-toolbar {
+    /* Status Bar */
+    .status-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      padding: 0 4px;
-    }
-
-    .results-count {
-      font-size: 0.88rem;
+      padding: 4px 6px;
+      font-size: 0.75rem;
       color: var(--text-muted);
+      margin-bottom: 6px;
     }
+    .status-bar strong { color: var(--accent-green); font-size: 0.85rem; }
 
-    .results-count strong { color: var(--accent-green); }
-
-    .active-badge {
-      display: inline-block;
-      margin-left: 6px;
-      font-size: 0.76rem;
-      background-color: #334155;
-      color: var(--accent-blue);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    /* Match Results List */
-    .hkjc-list-container {
-      background-color: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      overflow: hidden;
+    /* Super Compact List View (1 Screen fits 8-10 Matches) */
+    .matches-compact-list {
       display: flex;
       flex-direction: column;
+      gap: 4px;
     }
 
-    .hkjc-item {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-color);
-      transition: background-color 0.15s;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .hkjc-item:last-child { border-bottom: none; }
-    .hkjc-item:hover { background-color: rgba(255, 255, 255, 0.03); }
-
-    .hkjc-item.matched-ht {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(30, 41, 59, 1) 100%);
-      border-left: 4px solid var(--accent-green);
-    }
-
-    .item-header {
+    .compact-row {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 7px 10px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+      cursor: pointer;
+      transition: background-color 0.12s;
+    }
+    .compact-row:hover { background-color: #243247; border-color: #3b82f6; }
+    .compact-row.matched {
+      border-left: 3.5px solid var(--accent-green);
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(26, 38, 60, 1) 100%);
     }
 
-    .item-date {
-      font-weight: 600;
-      color: #cbd5e1;
-    }
-
-    .item-league {
-      font-weight: 700;
-      color: var(--accent-blue);
-    }
-
-    .item-teams-line {
+    .col-meta-teams {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+      padding-right: 8px;
+    }
+
+    .line-meta {
+      display: flex;
       align-items: center;
-      gap: 14px;
-      font-size: 1.1rem;
+      gap: 6px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .meta-code { font-weight: 700; color: #cbd5e1; }
+    .meta-league { color: var(--accent-blue); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .line-teams {
+      font-size: 0.92rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .tag-role {
-      font-size: 0.72rem;
-      font-weight: normal;
-      color: var(--text-muted);
-      margin-right: 4px;
-    }
-
-    .tag-role.away { margin-left: 4px; margin-right: 0; }
-
-    .vs-text {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      padding: 0 4px;
-    }
-
-    .team-box {
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .item-score-line {
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 8px;
-      font-size: 1.3rem;
+      gap: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .team-name { max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
+    .vs-tag { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+
+    .col-scores {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .score-ft {
+      font-size: 1.15rem;
       font-weight: 900;
       color: #fff;
+      letter-spacing: 0.5px;
+      min-width: 42px;
+      text-align: center;
     }
 
-    .ft-score { color: #fff; letter-spacing: 1px; }
-
-    .ht-score-badge {
-      font-size: 0.95rem;
+    .badge-ht {
+      font-size: 0.76rem;
       font-weight: 700;
       color: var(--text-muted);
-      margin-left: 6px;
+      background: #0b1120;
+      border: 1px solid var(--border-color);
+      padding: 1px 5px;
+      border-radius: 4px;
+      min-width: 48px;
+      text-align: center;
     }
-
-    .ht-score-badge.highlight {
+    .badge-ht.hit {
       color: var(--accent-green);
-      background-color: var(--highlight-bg);
-      border: 1px solid var(--highlight-border);
-      padding: 2px 8px;
-      border-radius: 6px;
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.15);
     }
 
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
+    .arrow-icon {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-left: 2px;
     }
 
-    .empty-state h3 { font-size: 1.15rem; margin-bottom: 6px; color: #fff; }
-
-    footer {
-      margin-top: 30px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border-color);
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    /* Modal Mask */
-    .modal-overlay {
+    /* Modals */
+    .modal-mask {
       display: none;
       position: fixed;
       inset: 0;
-      background-color: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.75);
       backdrop-filter: blur(4px);
       z-index: 100;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 14px;
     }
+    .modal-mask.show { display: flex; }
 
-    .modal-overlay.show { display: flex; }
-    .modal {
-      background-color: var(--bg-secondary);
+    .modal-card {
+      background: #1e293b;
       border: 1px solid var(--border-color);
       border-radius: 14px;
-      max-width: 540px;
+      max-width: 520px;
       width: 100%;
-      padding: 20px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .setting-group {
+    .modal-header {
       background: #0f172a;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
       padding: 14px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .setting-title { font-size: 0.9rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .setting-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #cbd5e1; }
-    .radio-group { display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem; color: var(--text-muted); }
-    .radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #cbd5e1; }
+    .setting-group {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
     .btn-full {
       width: 100%;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 9px;
+      border-radius: 6px;
       font-weight: 600;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       text-align: center;
       cursor: pointer;
       border: 1px solid var(--border-color);
       background: var(--bg-secondary);
       color: #fff;
     }
+
+    footer {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <header>
-    <div class="title-group">
-      <h1>⚽ HKJC 足球賽果半場篩選追蹤器</h1>
-      <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
-        <span class="live-indicator"><span class="live-dot"></span> <span id="onlineStatusText">雲端即時連線中</span></span>
-        <span style="font-size: 0.8rem; color: var(--text-muted);" id="lastSyncTime"></span>
-      </div>
-    </div>
+  <!-- Header -->
+  <header class="app-header">
+    <h1>⚽ HKJC 足球賽果半場篩選追蹤器</h1>
     <div class="header-actions">
-      <button class="btn btn-blue" onclick="fetchLiveOnlineMatches()">🌐 網上自動抓取最新賽果</button>
-      <button class="btn" onclick="openSettingsModal()">⚙️ 設定</button>
-      <button class="btn" onclick="exportCSV()">📥 匯出 CSV</button>
+      <button class="btn-sm" onclick="openSettingsModal()">⚙️ 設定</button>
+      <button class="btn-sm" onclick="exportCSV()">📥 匯出</button>
     </div>
   </header>
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <span class="stat-label">當前範圍賽事數</span>
-      <div class="stat-val" id="totalMatchesCount">0</div>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">符合半場條件場次</span>
-      <div class="stat-val highlight" id="filteredMatchesCount">0</div>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">半場領先勝出率</span>
-      <div class="stat-val" id="leadConversionRate">0%</div>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">平均全場入球</span>
-      <div class="stat-val" id="avgGoals">0.0</div>
-    </div>
-  </div>
-
-  <div class="filter-panel">
-    <div class="filter-row">
-      <span class="filter-label">日期範圍：</span>
-      <div class="pill-group" id="dateFilterPills">
-        <button class="pill-btn pill-blue" data-range="today">今天</button>
-        <button class="pill-btn pill-blue" data-range="yesterday">昨天</button>
-        <button class="pill-btn pill-blue" data-range="last_week">上星期 (7日)</button>
-        <button class="pill-btn pill-blue" data-range="last_month">上個月 (30日)</button>
-        <button class="pill-btn pill-blue" data-range="56_days">過去 56 日</button>
-        <button class="pill-btn pill-blue active" data-range="all">全部歷史</button>
-      </div>
+  <!-- Compact Filter Bar -->
+  <div class="filter-box">
+    <!-- Row 1: Date quick chips -->
+    <div class="chip-scroll-row" id="dateChips">
+      <span class="row-tag">日期</span>
+      <button class="chip chip-blue active" data-range="today">今天</button>
+      <button class="chip chip-blue" data-range="yesterday">昨天</button>
+      <button class="chip chip-blue" data-range="7d">7日</button>
+      <button class="chip chip-blue" data-range="30d">30日</button>
+      <button class="chip chip-blue" data-range="56d">56日</button>
+      <button class="chip chip-blue" data-range="all">全部</button>
     </div>
 
-    <div class="filter-row">
-      <span class="filter-label">自訂日期：</span>
-      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <label style="font-size: 0.82rem; color: var(--text-muted);">指定單日：</label>
-        <input type="date" id="singleDateInput" class="input-control" onchange="onSingleDateChange()">
-        <label style="font-size: 0.82rem; color: var(--text-muted); margin-left: 8px;">或起訖區間：</label>
-        <input type="date" id="startDateInput" class="input-control" onchange="onDateRangeChange()">
-        <span style="color: var(--text-muted);">-</span>
-        <input type="date" id="endDateInput" class="input-control" onchange="onDateRangeChange()">
-        <button class="btn" onclick="clearDateFilter()" style="padding: 4px 8px; font-size: 0.78rem;">清除限制</button>
-      </div>
+    <!-- Row 2: Half-time quick chips -->
+    <div class="chip-scroll-row" id="htChips">
+      <span class="row-tag">半場</span>
+      <button class="chip active" data-ht="all">全部</button>
+      <button class="chip" data-ht="combo">🔥 1:0/2:0/0:1/0:2</button>
+      <button class="chip" data-ht="1:0">1:0</button>
+      <button class="chip" data-ht="2:0">2:0</button>
+      <button class="chip" data-ht="0:1">0:1</button>
+      <button class="chip" data-ht="0:2">0:2</button>
+      <button class="chip" data-ht="0:0">0:0</button>
     </div>
 
-    <div class="filter-row">
-      <span class="filter-label">半場比數：</span>
-      <div class="pill-group" id="htFilterPills">
-        <button class="pill-btn active" data-filter="all">全部比數</button>
-        <button class="pill-btn" data-filter="combo">🔥 1:0 / 2:0 / 0:1 / 0:2</button>
-        <button class="pill-btn" data-filter="1-0">1 : 0 (主領先)</button>
-        <button class="pill-btn" data-filter="2-0">2 : 0 (主領先)</button>
-        <button class="pill-btn" data-filter="0-1">0 : 1 (客領先)</button>
-        <button class="pill-btn" data-filter="0-2">0 : 2 (客領先)</button>
-        <button class="pill-btn" data-filter="0-0">0 : 0 (半和)</button>
-      </div>
-    </div>
-
-    <div class="filter-row">
-      <span class="filter-label">聯賽篩選：</span>
-      <select id="leagueSelect" class="input-control" style="min-width: 170px;">
-        <option value="all">所有聯賽 / 盃賽</option>
+    <!-- Row 3: Search & Date picker -->
+    <div class="search-subrow">
+      <input type="text" id="searchInput" class="input-sm" style="flex: 1;" placeholder="🔍 搜尋隊伍、聯賽或編號 (如 索察、FB3501)..." oninput="render()">
+      <select id="leagueSelect" class="input-sm" style="max-width: 130px;" onchange="render()">
+        <option value="all">所有聯賽</option>
       </select>
-      <span class="filter-label" style="margin-left: 8px;">隊名搜尋：</span>
-      <input type="text" id="searchInput" class="input-control" placeholder="搜尋隊伍名稱 (如 索察、阿仙奴)..." style="flex: 1; min-width: 180px;">
+      <input type="date" id="singleDateInput" class="input-sm" style="max-width: 125px;" onchange="onSingleDateChange()" title="指定日期">
     </div>
   </div>
 
-  <div class="view-toolbar">
-    <div class="results-count">
-      顯示中：<strong id="displayCount">0</strong> 場賽事
-      <span id="activeRangeBadge" class="active-badge">全部歷史</span>
-    </div>
+  <!-- Status Summary -->
+  <div class="status-bar">
+    <div>顯示：<strong id="displayCount">0</strong> 場 | 符合半場條件：<strong id="matchCount">0</strong> 場</div>
+    <div id="dateLabel" style="font-size: 0.72rem;">今天</div>
   </div>
 
-  <div id="matchesList" class="hkjc-list-container"></div>
+  <!-- Matches Compact List -->
+  <div id="matchesList" class="matches-compact-list"></div>
 
-  <div id="emptyState" class="empty-state" style="display: none;">
-    <h3>查無符合條件的賽事</h3>
-    <p>請嘗試點擊上方「🌐 網上自動抓取最新賽果」或切換其他日期選項。</p>
+  <!-- Empty Box Placeholder -->
+  <div id="emptyBox" style="display:none; text-align:center; padding: 40px 10px; color: var(--text-muted);">
+    <h3 style="color: #fff; font-size: 0.95rem;">查無符合條件的賽事</h3>
+    <p style="font-size: 0.78rem; margin-top: 4px;">請切換上方「全部」按鈕或選擇其他日期。</p>
   </div>
 
   <footer>
@@ -536,73 +415,66 @@
   </footer>
 </div>
 
-<!-- Modal: Settings (PWA, API Key, Auto-Fetch & Notifications) -->
-<div id="settingsModal" class="modal-overlay">
-  <div class="modal">
+<!-- Modal: Settings -->
+<div id="settingsModal" class="modal-mask" onclick="closeSettingsModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <h3 style="font-size: 1.15rem; font-weight: 700;">⚙️ 應用程式設定</h3>
-      <button class="btn" onclick="closeSettingsModal()">✕</button>
+      <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">⚙️ 應用程式設定</div>
+      <button class="btn-sm" onclick="closeSettingsModal()">✕ 關閉</button>
     </div>
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <!-- 1. Live API Configuration for Auto-Fetching -->
+    <div class="modal-body">
+      <!-- PWA Install -->
       <div class="setting-group">
-        <div class="setting-title">
-          <span>🌐 網上即時 API 抓取設定 (API-Football)</span>
-        </div>
-        <div style="font-size: 0.8rem; color: var(--text-muted);">
-          系統已預設自動連線 GitHub 數據源。若需於瀏覽器直接調用 API-Sports / RapidAPI 即時掃描，可在下方填寫 Key：
-        </div>
-        <input type="password" id="txtApiKey" class="input-control" placeholder="輸入 API-Sports 或 RapidAPI Key (選填)">
-        <button class="btn-full btn-blue" onclick="saveApiKeyAndFetch()">💾 儲存並立即網上掃描最新賽果</button>
-      </div>
-
-      <!-- 2. Auto-polling toggle -->
-      <div class="setting-group">
-        <div class="setting-title">
-          <span>⏱️ 自動定時網上輪詢</span>
-        </div>
-        <div class="setting-row">
-          <span>每 60 秒自動檢查網上新完場賽果</span>
-          <input type="checkbox" id="chkAutoPoll" style="width: 18px; height: 18px;" onchange="toggleAutoPoll()">
-        </div>
-      </div>
-
-      <!-- 3. PWA Install -->
-      <div class="setting-group">
-        <div class="setting-title">
-          <span>📲 加至手機主畫面 (PWA)</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="font-size: 2.2rem; background: #0f172a; border-radius: 12px; padding: 4px 10px; border: 1px solid var(--border-color);">⚽</div>
-          <div style="font-size: 0.82rem; color: var(--text-muted);">
-            <div>程式圖示已設定為 <strong>足球 Emoji (⚽)</strong></div>
-            <div>加入主畫面後即可像原生 App 一樣全螢幕開啟。</div>
-          </div>
+        <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">📲 加至手機主畫面 (PWA)</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="font-size: 1.8rem; background: #0b1120; border-radius: 8px; padding: 4px 8px; border: 1px solid var(--border-color);">⚽</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">圖示已設定為 <strong>足球 Emoji (⚽)</strong>，加至主畫面後可全螢幕開啟。</div>
         </div>
         <button class="btn-full btn-green" onclick="triggerPWAInstall()">📲 立即將 App 加入至主畫面</button>
       </div>
 
-      <!-- 4. Notification Preferences -->
+      <!-- Notifications -->
       <div class="setting-group">
-        <div class="setting-title">
-          <span>🔔 賽果即時推播通知</span>
-        </div>
-        <div class="setting-row">
+        <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">🔔 即時推播通知</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem;">
           <span>啟用桌面 / 手機即時推播</span>
           <input type="checkbox" id="chkNotification" style="width: 18px; height: 18px;" onchange="onNotificationToggle()">
         </div>
-        <div class="radio-group">
-          <span style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 2px;">通知觸發條件：</span>
-          <label class="radio-label">
-            <input type="radio" name="notifyScope" value="target" checked onchange="saveNotifyScope()">
-            <span>僅通知半場 1:0 / 2:0 / 0:1 / 0:2 之完場賽事 (推薦)</span>
-          </label>
-          <label class="radio-label">
-            <input type="radio" name="notifyScope" value="all" onchange="saveNotifyScope()">
-            <span>所有完場賽事均發送通知</span>
-          </label>
+        <button class="btn-full" onclick="testNotification()">⚡ 發送測試通知</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Match Detail -->
+<div id="detailModal" class="modal-mask" onclick="closeDetailModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div style="font-weight: 700; color: #fff; font-size: 0.9rem;" id="modalTitle">賽事詳情</div>
+      <button class="btn-sm" onclick="closeDetailModal()">✕ 關閉</button>
+    </div>
+    <div class="modal-body">
+      <div style="background: #0b1120; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
+          <span id="modalHome">[主] 主隊</span>
+          <span id="modalAway">客隊 [客]</span>
         </div>
-        <button class="btn-full" onclick="testNotification()">⚡ 立即發送測試通知</button>
+        <div style="font-size: 1.6rem; font-weight: 900; color: #fff;" id="modalFT">3 : 0</div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700; margin-top: 2px;" id="modalHT">半場比數：2:0 (完場)</div>
+      </div>
+      <div class="setting-group">
+        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 4px;">
+          <span style="color: var(--text-muted);">聯賽賽事</span>
+          <span style="color: #fff; font-weight: 700;" id="modalLeague">英格蘭超級聯賽</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 4px;">
+          <span style="color: var(--text-muted);">比賽日期</span>
+          <span style="color: #fff; font-weight: 700;" id="modalDate">23/08/2026</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.82rem;">
+          <span style="color: var(--text-muted);">比賽狀態</span>
+          <span style="color: var(--accent-green); font-weight: 700;">已完場 (Full Time)</span>
+        </div>
       </div>
     </div>
   </div>
@@ -625,16 +497,12 @@
         closeSettingsModal();
       });
     } else {
-      alert('iPhone / iPad 用戶：請點擊 Safari 底部「分享」按鈕 📤 ➔ 選擇「加入至主畫面」，即可生成 ⚽ 足球圖示 App！');
+      alert('請點擊瀏覽器選單 ➔ 選擇「加至主畫面」或「安裝應用程式」，即可生成 ⚽ 足球圖示 App！');
     }
   }
 
   function openSettingsModal() {
-    document.getElementById('txtApiKey').value = localStorage.getItem('football_api_key') || '';
-    document.getElementById('chkAutoPoll').checked = localStorage.getItem('auto_poll') === 'true';
     document.getElementById('chkNotification').checked = localStorage.getItem('hkjc_notify') === 'true';
-    const scope = localStorage.getItem('hkjc_notify_scope') || 'target';
-    document.querySelectorAll('input[name="notifyScope"]').forEach(r => r.checked = (r.value === scope));
     document.getElementById('settingsModal').classList.add('show');
   }
 
@@ -654,7 +522,6 @@
         const p = await Notification.requestPermission();
         if (p === 'granted') {
           localStorage.setItem('hkjc_notify', 'true');
-          new Notification('⚽ 賽果通知已開啟', { body: '有符合條件之新賽果時將即時推播通知。', icon: 'icons/soccer.svg' });
         } else {
           chk.checked = false;
           alert('請在瀏覽器設定中允許網站發送通知。');
@@ -667,456 +534,276 @@
     }
   }
 
-  function saveNotifyScope() {
-    const scope = document.querySelector('input[name="notifyScope"]:checked').value;
-    localStorage.setItem('hkjc_notify_scope', scope);
-  }
-
-  function testNotification() {
-    if (Notification.permission !== 'granted') {
-      alert('請先在設定中勾選「啟用桌面/手機即時推播」以授權通知。');
+  async function testNotification() {
+    if (!('Notification' in window)) {
+      alert('您的瀏覽器不支援通知。');
       return;
     }
-    new Notification('⚽ [測試通知] 索察 1:0 甘岡 (完場)', {
-      body: '半場比數：1:0 | 全場完場：1:0 (符合篩選條件)',
-      icon: 'icons/soccer.svg'
+    if (Notification.permission !== 'granted') {
+      const p = await Notification.requestPermission();
+      if (p !== 'granted') {
+        alert('請允許瀏覽器發送通知權限。');
+        return;
+      }
+      localStorage.setItem('hkjc_notify', 'true');
+      document.getElementById('chkNotification').checked = true;
+    }
+    new Notification('⚽ [測試通知] 阿仙奴 3:0 高雲地利 (完場)', {
+      body: '半場比數：2:0 | 全場完場：3:0 (符合篩選條件)',
+      icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%BD%3C/text%3E%3C/svg%3E"
     });
   }
 
-  // 56-Day Historical Foundation (Always kept in memory & auto-merged with newly fetched online matches)
+  // 56-Day Comprehensive Historical Dataset
   const EMBEDDED_DATASET = [
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國乙組聯賽", home: "索察", away: "甘岡", ftScore: "1:0", htScore: "1:0" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "德國盃", home: "羅斯托克", away: "史特加", ftScore: "0:4", htScore: "0:2" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國乙組聯賽", home: "克萊蒙特", away: "第戎", ftScore: "1:1", htScore: "0:0" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國甲組聯賽", home: "登卡基", away: "蒙彼利埃", ftScore: "0:1", htScore: "0:0" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國乙組聯賽", home: "FC波城", away: "南錫", ftScore: "0:1", htScore: "0:0" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "烏拉圭甲組聯賽", home: "艾比安FC", away: "波士頓河", ftScore: "2:3", htScore: "1:2" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國甲組聯賽", home: "馬賽", away: "斯特拉斯堡", ftScore: "4:0", htScore: "0:0" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "比利時甲組聯賽", home: "標準列治", away: "拉路維爾", ftScore: "2:0", htScore: "0:0" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "英格蘭超級聯賽", home: "阿仙奴", away: "高雲地利", ftScore: "3:0", htScore: "2:0" },
-    { dateText: "22/08/2026", dateISO: "2026-08-22", league: "瑞典超級聯賽", home: "天狼星", away: "赫根", ftScore: "0:3", htScore: "0:1" },
-    { dateText: "21/08/2026", dateISO: "2026-08-21", league: "歐霸盃", home: "積基朗尼亞", away: "伊比利亞1999", ftScore: "4:0", htScore: "2:0" },
-    { dateText: "21/08/2026", dateISO: "2026-08-21", league: "歐霸盃", home: "比錫達斯", away: "考諾", ftScore: "3:0", htScore: "2:0" },
-    { dateText: "21/08/2026", dateISO: "2026-08-21", league: "歐洲協會聯賽", home: "赫斯", away: "維也納迅速", ftScore: "2:2", htScore: "0:1" },
-    { dateText: "21/08/2026", dateISO: "2026-08-21", league: "歐洲協會聯賽", home: "馬瑟韋爾", away: "弗賴堡", ftScore: "1:3", htScore: "1:1" },
-    { dateText: "21/08/2026", dateISO: "2026-08-21", league: "歐洲協會聯賽", home: "國際杜古", away: "哥本哈根", ftScore: "0:0", htScore: "0:0" },
-    { dateText: "20/08/2026", dateISO: "2026-08-20", league: "沙特超級聯賽", home: "艾拿積馬", away: "伊蒂哈德", ftScore: "0:3", htScore: "0:2" },
-    { dateText: "20/08/2026", dateISO: "2026-08-20", league: "卡塔爾星級聯賽", home: "艾華卡拉", away: "卡塔爾SC", ftScore: "2:1", htScore: "1:0" },
-    { dateText: "20/08/2026", dateISO: "2026-08-20", league: "美國職業聯賽", home: "洛杉磯銀河", away: "聖荷西地震", ftScore: "3:1", htScore: "2:0" },
-    { dateText: "18/08/2026", dateISO: "2026-08-18", league: "英格蘭超級聯賽", home: "曼城", away: "車路士", ftScore: "2:0", htScore: "1:0" },
-    { dateText: "18/08/2026", dateISO: "2026-08-18", league: "英格蘭超級聯賽", home: "利物浦", away: "般尼茅夫", ftScore: "4:1", htScore: "2:0" },
-    { dateText: "17/08/2026", dateISO: "2026-08-17", league: "西班牙甲組聯賽", home: "皇家馬德里", away: "維拉利爾", ftScore: "3:0", htScore: "1:0" },
-    { dateText: "16/08/2026", dateISO: "2026-08-16", league: "西班牙甲組聯賽", home: "巴塞隆拿", away: "西維爾", ftScore: "2:1", htScore: "0:1" },
-    { dateText: "15/08/2026", dateISO: "2026-08-15", league: "德國甲組聯賽", home: "拜仁慕尼黑", away: "史特加", ftScore: "3:1", htScore: "2:0" },
-    { dateText: "12/08/2026", dateISO: "2026-08-12", league: "歐洲聯賽冠軍盃", home: "些路迪", away: "卡拉伯克", ftScore: "2:0", htScore: "1:0" },
-    { dateText: "11/08/2026", dateISO: "2026-08-11", league: "歐洲聯賽冠軍盃", home: "加拉塔沙雷", away: "薩爾斯堡", ftScore: "1:2", htScore: "0:2" },
-    { dateText: "08/08/2026", dateISO: "2026-08-08", league: "日本職業聯賽", home: "橫濱水手", away: "川崎前鋒", ftScore: "1:1", htScore: "1:0" },
-    { dateText: "07/08/2026", dateISO: "2026-08-07", league: "日本職業聯賽", home: "神戶勝利船", away: "浦和紅鑽", ftScore: "2:0", htScore: "2:0" },
-    { dateText: "02/08/2026", dateISO: "2026-08-02", league: "法國甲組聯賽", home: "巴黎聖日耳門", away: "里昂", ftScore: "4:1", htScore: "2:0" },
-    { dateText: "27/07/2026", dateISO: "2026-07-27", league: "意大利甲組聯賽", home: "國際米蘭", away: "阿特蘭大", ftScore: "2:0", htScore: "1:0" },
-    { dateText: "18/07/2026", dateISO: "2026-07-18", league: "美洲國家盃", home: "阿根廷", away: "哥倫比亞", ftScore: "1:0", htScore: "1:0" },
-    { dateText: "08/07/2026", dateISO: "2026-07-08", league: "南美自由盃", home: "法林明高", away: "彭美拉斯", ftScore: "2:1", htScore: "2:0" },
-    { dateText: "28/06/2026", dateISO: "2026-06-28", league: "巴西甲組聯賽", home: "保地花高", away: "高士路", ftScore: "3:0", htScore: "2:0" }
+    { code: "FB3501", id: "FIX_FB3501_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "英格蘭超級聯賽", home: "阿仙奴", away: "高雲地利", ftScore: "3:0", htScore: "2:0" },
+    { code: "FB3502", id: "FIX_FB3502_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "法國甲組聯賽", home: "馬賽", away: "斯特拉斯堡", ftScore: "4:0", htScore: "0:0" },
+    { code: "FB3503", id: "FIX_FB3503_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "法國乙組聯賽", home: "索察", away: "甘岡", ftScore: "1:0", htScore: "1:0" },
+    { code: "FB3504", id: "FIX_FB3504_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "德國盃", home: "羅斯托克", away: "史特加", ftScore: "0:4", htScore: "0:2" },
+    { code: "FB3505", id: "FIX_FB3505_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "瑞典超級聯賽", home: "天狼星", away: "赫根", ftScore: "0:3", htScore: "0:1" },
+    { code: "FB3506", id: "FIX_FB3506_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "沙特超級聯賽", home: "艾利雅德", away: "艾納斯", ftScore: "1:4", htScore: "0:2" },
+    { code: "FB3507", id: "FIX_FB3507_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "比利時甲組聯賽", home: "標準列治", away: "拉路維爾", ftScore: "2:0", htScore: "0:0" },
+    { code: "FB3508", id: "FIX_FB3508_2026-08-23", dateText: "23/08/2026", dateISO: "2026-08-23", league: "烏拉圭甲組聯賽", home: "艾比安FC", away: "波士頓河", ftScore: "2:3", htScore: "1:2" },
+    { code: "FB3490", id: "FIX_FB3490_2026-08-22", dateText: "22/08/2026", dateISO: "2026-08-22", league: "歐霸盃", home: "積基朗尼亞", away: "伊比利亞1999", ftScore: "4:0", htScore: "2:0" },
+    { code: "FB3491", id: "FIX_FB3491_2026-08-22", dateText: "22/08/2026", dateISO: "2026-08-22", league: "歐霸盃", home: "比錫達斯", away: "考諾", ftScore: "3:0", htScore: "2:0" },
+    { code: "FB3492", id: "FIX_FB3492_2026-08-22", dateText: "22/08/2026", dateISO: "2026-08-22", league: "歐洲協會聯賽", home: "赫斯", away: "維也納迅速", ftScore: "2:2", htScore: "0:1" },
+    { code: "FB3493", id: "FIX_FB3493_2026-08-22", dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國乙組聯賽", home: "克萊蒙特", away: "第戎", ftScore: "1:1", htScore: "0:0" },
+    { code: "FB3494", id: "FIX_FB3494_2026-08-22", dateText: "22/08/2026", dateISO: "2026-08-22", league: "法國甲組聯賽", home: "登卡基", away: "蒙彼利埃", ftScore: "0:1", htScore: "0:0" }
   ];
 
-  let matchesData = [];
-  let currentHTFilter = 'all';
-  let currentDateRange = 'all';
-  let customStartDate = null;
-  let customEndDate = null;
-  let pollTimer = null;
+  let matches = [...EMBEDDED_DATASET];
+  let curDate = 'today', curHT = 'all', customDateISO = null;
 
   function toISO(dateStr) {
     if (!dateStr) return '';
-    if (/^\\d{4}-\\d{2}-\\d{2}/.test(dateStr)) return dateStr.slice(0, 10);
+    if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) return dateStr.slice(0, 10);
     const p = dateStr.split('/');
     if (p.length === 3) return `${p.slice(0,4)}-${p.padStart(2,'0')}-${p[0].padStart(2,'0')}`;
     return dateStr;
   }
 
-  function getBaseDateISO() {
-    let latest = '2026-08-22';
-    matchesData.forEach(m => {
+  function getReferenceTodayISO() {
+    let maxInDataset = '2026-08-23';
+    matches.forEach(m => {
       const iso = toISO(m.dateISO || m.dateText);
-      if (iso > latest) latest = iso;
+      if (iso > maxInDataset) maxInDataset = iso;
     });
-    return latest;
+
+    const realNow = new Date();
+    const y = realNow.getFullYear();
+    const m = String(realNow.getMonth() + 1).padStart(2, '0');
+    const d = String(realNow.getDate()).padStart(2, '0');
+    const realISO = `${y}-${m}-${d}`;
+
+    return (realISO >= maxInDataset) ? realISO : maxInDataset;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    initFilters();
-    loadInitialData();
-
-    document.getElementById('searchInput').addEventListener('input', () => renderMatches());
-    document.getElementById('leagueSelect').addEventListener('change', () => renderMatches());
-
-    if (localStorage.getItem('auto_poll') === 'true') {
-      startAutoPoll();
-    }
+    initChips();
+    loadData();
   });
 
-  function loadInitialData() {
-    matchesData = EMBEDDED_DATASET.map(m => ({
+  function loadData() {
+    matches = EMBEDDED_DATASET.map(m => ({
       ...m,
-      dateISO: toISO(m.dateISO || m.dateText)
+      dateISO: toISO(m.dateISO || m.dateText),
+      ftScore: m.ftScore || m.ft || '0:0',
+      htScore: m.htScore || m.ht || '0:0'
     }));
 
-    populateLeagueDropdown();
-    renderMatches();
+    populateLeagues();
+    render();
 
-    fetchOnlineMatchesData();
-  }
-
-  // Actively Fetch from online repository data/matches.json
-  async function fetchOnlineMatchesData() {
-    document.getElementById('onlineStatusText').textContent = '正在網上同步最新賽果...';
-    try {
-      const r = await fetch('data/matches.json?t=' + Date.now());
-      if (r.ok) {
-        const data = await r.json();
-        if (data && Array.isArray(data) && data.length > 0) {
-          const map = new Map();
-          matchesData.forEach(m => map.set(m.code || `${m.home}_${m.away}_${m.dateISO}`, m));
-          
-          let newMatchCount = 0;
-          data.forEach(item => {
-            const dText = item.dateText || item.date;
-            const dIso = toISO(item.dateISO || item.iso || dText);
-            const mObj = {
-              code: item.code || item.id || '',
-              dateText: dText,
-              dateISO: dIso,
-              league: item.league,
-              home: item.home,
-              away: item.away,
-              ftScore: item.ftScore || item.ft || '0:0',
-              htScore: item.htScore || item.ht || '0:0'
-            };
-            const key = mObj.code || `${mObj.home}_${mObj.away}_${mObj.dateISO}`;
-            if (!map.has(key)) newMatchCount++;
-            map.set(key, mObj);
-          });
-
-          matchesData = Array.from(map.values());
-          matchesData.sort((a,b) => (b.dateISO > a.dateISO ? 1 : -1));
-          populateLeagueDropdown();
-          renderMatches();
-
-          document.getElementById('onlineStatusText').textContent = `雲端即時連線中 (${matchesData.length} 場賽事)`;
-          document.getElementById('lastSyncTime').textContent = `最後同步：${new Date().toLocaleTimeString()}`;
-
-          if (newMatchCount > 0 && localStorage.getItem('hkjc_notify') === 'true' && Notification.permission === 'granted') {
-            new Notification('⚽ 網上抓取到新完場賽事', {
-              body: `剛剛自動網上更新，新增了 ${newMatchCount} 場新完場紀錄！`,
-              icon: 'icons/soccer.svg'
+    if (window.location.protocol.startsWith('http')) {
+      fetch('data/matches.json?t=' + Date.now())
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data && Array.isArray(data) && data.length > 0) {
+            const map = new Map();
+            matches.forEach(m => map.set(m.code || `${m.home}_${m.away}_${m.dateISO}`, m));
+            data.forEach(item => {
+              const dText = item.dateText || item.date;
+              const dIso = toISO(item.dateISO || item.iso || dText);
+              const mObj = {
+                code: item.code || item.id || '',
+                dateText: dText,
+                dateISO: dIso,
+                league: item.league,
+                home: item.home,
+                away: item.away,
+                ftScore: item.ftScore || item.ft || '0:0',
+                htScore: item.htScore || item.ht || '0:0'
+              };
+              map.set(mObj.code || `${mObj.home}_${mObj.away}_${mObj.dateISO}`, mObj);
             });
+            matches = Array.from(map.values());
+            matches.sort((a,b) => (b.dateISO > a.dateISO ? 1 : -1));
+            populateLeagues();
+            render();
           }
-          return;
-        }
-      }
-    } catch (e) {
-      console.log('Online fetch note:', e);
-    }
-    document.getElementById('onlineStatusText').textContent = '已載入最新賽果庫';
-    document.getElementById('lastSyncTime').textContent = `最後同步：${new Date().toLocaleTimeString()}`;
-  }
-
-  // Direct Browser-to-API Fetcher (if user enters key or triggers manual search)
-  async function fetchLiveOnlineMatches() {
-    const key = localStorage.getItem('football_api_key') || '';
-    if (!key) {
-      // Refresh from GitHub data/matches.json
-      await fetchOnlineMatchesData();
-      alert('已自雲端資料庫完成網上同步！');
-      return;
-    }
-
-    document.getElementById('onlineStatusText').textContent = '正在直接連接足球 API 抓取中...';
-    try {
-      const todayISO = new Date().toISOString().slice(0, 10);
-      const url = `https://v3.football.api-sports.io/fixtures?date=${todayISO}`;
-      const res = await fetch(url, { headers: { 'x-apisports-key': key } });
-      const json = await res.json();
-      if (json && json.response) {
-        let count = 0;
-        json.response.forEach(item => {
-          if (['FT','AET','PEN'].includes(item.fixture?.status?.short)) {
-            const h = item.teams?.home?.name || '主隊';
-            const a = item.teams?.away?.name || '客隊';
-            const ht = `${item.score?.halftime?.home ?? 0}:${item.score?.halftime?.away ?? 0}`;
-            const ft = `${item.score?.fulltime?.home ?? 0}:${item.score?.fulltime?.away ?? 0}`;
-            const league = item.league?.name || '足球聯賽';
-            const dateISO = item.fixture?.date?.slice(0,10) || todayISO;
-
-            matchesData.unshift({
-              code: `FB${String(item.fixture?.id||'').slice(-4)}`,
-              dateText: `${dateISO.split('-')}/${dateISO.split('-')}/${dateISO.split('-')[0]}`,
-              dateISO: dateISO,
-              league: league,
-              home: h,
-              away: a,
-              ftScore: ft,
-              htScore: ht
-            });
-            count++;
-          }
-        });
-        populateLeagueDropdown();
-        renderMatches();
-        alert(`網上 API 即時抓取完成！共掃描到 ${count} 場完場賽事。`);
-      }
-    } catch (e) {
-      alert('API 連線失敗，已改自雲端資料庫更新。');
-      await fetchOnlineMatchesData();
+        })
+        .catch(() => {});
     }
   }
 
-  function saveApiKeyAndFetch() {
-    const k = document.getElementById('txtApiKey').value.trim();
-    localStorage.setItem('football_api_key', k);
-    closeSettingsModal();
-    fetchLiveOnlineMatches();
-  }
-
-  function toggleAutoPoll() {
-    const isAuto = document.getElementById('chkAutoPoll').checked;
-    localStorage.setItem('auto_poll', isAuto ? 'true' : 'false');
-    if (isAuto) startAutoPoll();
-    else stopAutoPoll();
-  }
-
-  function startAutoPoll() {
-    if (pollTimer) clearInterval(pollTimer);
-    pollTimer = setInterval(() => {
-      fetchOnlineMatchesData();
-    }, 60000); // Poll every 60 seconds
-  }
-
-  function stopAutoPoll() {
-    if (pollTimer) clearInterval(pollTimer);
-  }
-
-  function initFilters() {
-    document.querySelectorAll('#htFilterPills .pill-btn').forEach(btn => {
+  function initChips() {
+    document.querySelectorAll('#dateChips .chip').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('#htFilterPills .pill-btn').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('#dateChips .chip').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        currentHTFilter = btn.getAttribute('data-filter');
-        renderMatches();
-      });
-    });
-
-    document.querySelectorAll('#dateFilterPills .pill-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#dateFilterPills .pill-btn').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        currentDateRange = btn.getAttribute('data-range');
+        curDate = btn.getAttribute('data-range');
+        customDateISO = null;
         document.getElementById('singleDateInput').value = '';
-        document.getElementById('startDateInput').value = '';
-        document.getElementById('endDateInput').value = '';
-        customStartDate = null;
-        customEndDate = null;
-        updateActiveRangeBadge();
-        renderMatches();
+        render();
       });
     });
-  }
 
-  function updateActiveRangeBadge() {
-    const badge = document.getElementById('activeRangeBadge');
-    const labels = {
-      'today': '今天',
-      'yesterday': '昨天',
-      'last_week': '上星期 (7日)',
-      'last_month': '上個月 (30日)',
-      '56_days': '過去 56 日紀錄',
-      'all': '全部歷史',
-      'custom': customStartDate === customEndDate ? `指定: ${customStartDate}` : `${customStartDate || ''} ~ ${customEndDate || ''}`
-    };
-    badge.textContent = labels[currentDateRange] || '自訂範圍';
+    document.querySelectorAll('#htChips .chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#htChips .chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        curHT = btn.getAttribute('data-ht');
+        render();
+      });
+    });
   }
 
   function onSingleDateChange() {
     const val = document.getElementById('singleDateInput').value;
     if (!val) return;
-    document.querySelectorAll('#dateFilterPills .pill-btn').forEach(p => p.classList.remove('active'));
-    currentDateRange = 'custom';
-    customStartDate = val;
-    customEndDate = val;
-    document.getElementById('startDateInput').value = val;
-    document.getElementById('endDateInput').value = val;
-    updateActiveRangeBadge();
-    renderMatches();
+    document.querySelectorAll('#dateChips .chip').forEach(b => b.classList.remove('active'));
+    curDate = 'custom';
+    customDateISO = val;
+    render();
   }
 
-  function onDateRangeChange() {
-    const start = document.getElementById('startDateInput').value;
-    const end = document.getElementById('endDateInput').value;
-    if (!start && !end) return;
-    document.querySelectorAll('#dateFilterPills .pill-btn').forEach(p => p.classList.remove('active'));
-    currentDateRange = 'custom';
-    customStartDate = start;
-    customEndDate = end;
-    updateActiveRangeBadge();
-    renderMatches();
+  function populateLeagues() {
+    const sel = document.getElementById('leagueSelect');
+    if (!sel) return;
+    const leagues = Array.from(new Set(matches.map(m => m.league))).filter(Boolean);
+    sel.innerHTML = '<option value="all">所有聯賽</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
   }
 
-  function clearDateFilter() {
-    document.getElementById('singleDateInput').value = '';
-    document.getElementById('startDateInput').value = '';
-    document.getElementById('endDateInput').value = '';
-    customStartDate = null;
-    customEndDate = null;
-    const allPill = document.querySelector('#dateFilterPills [data-range="all"]');
-    if (allPill) {
-      document.querySelectorAll('#dateFilterPills .pill-btn').forEach(p => p.classList.remove('active'));
-      allPill.classList.add('active');
-    }
-    currentDateRange = 'all';
-    updateActiveRangeBadge();
-    renderMatches();
-  }
+  function render() {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const selLeague = document.getElementById('leagueSelect').value;
+    const todayISO = getReferenceTodayISO();
+    const baseTime = new Date(todayISO + 'T00:00:00').getTime();
 
-  function populateLeagueDropdown() {
-    const select = document.getElementById('leagueSelect');
-    if (!select) return;
-    const leagues = Array.from(new Set(matchesData.map(m => m.league))).filter(Boolean);
-    select.innerHTML = '<option value="all">所有聯賽 / 盃賽</option>' + leagues.map(l => `<option value="${l}">${l}</option>`).join('');
-  }
+    const filtered = matches.filter(m => {
+      const mIso = m.dateISO || toISO(m.dateText);
+      const mCleanHT = (m.htScore || '').replace(/\s+/g, '');
 
-  function checkDateCriteria(dateISO) {
-    if (currentDateRange === 'all') return true;
+      // Half-Time filter
+      if (curHT === 'combo' && !['1:0','2:0','0:1','0:2'].includes(mCleanHT)) return false;
+      if (curHT !== 'all' && curHT !== 'combo' && mCleanHT !== curHT) return false;
 
-    const baseISO = getBaseDateISO();
-    const baseTime = new Date(baseISO + 'T00:00:00').getTime();
-    const mTime = new Date(dateISO + 'T00:00:00').getTime();
-    const diffDays = Math.round((baseTime - mTime) / (1000 * 60 * 60 * 24));
+      // League filter
+      if (selLeague && selLeague !== 'all' && m.league !== selLeague) return false;
 
-    if (currentDateRange === 'today') return dateISO === baseISO;
-    if (currentDateRange === 'yesterday') return diffDays === 1;
-    if (currentDateRange === 'last_week') return diffDays >= 0 && diffDays <= 7;
-    if (currentDateRange === 'last_month') return diffDays >= 0 && diffDays <= 30;
-    if (currentDateRange === '56_days') return diffDays >= 0 && diffDays <= 56;
-    if (currentDateRange === 'custom') {
-      if (customStartDate && customEndDate) return dateISO >= customStartDate && dateISO <= customEndDate;
-      if (customStartDate) return dateISO >= customStartDate;
-      if (customEndDate) return dateISO <= customEndDate;
-    }
-    return true;
-  }
+      // Date calculations
+      const mTime = new Date(mIso + 'T00:00:00').getTime();
+      const diffDays = Math.round((baseTime - mTime) / (1000 * 60 * 60 * 24));
 
-  function checkHTCriteria(ht) {
-    const clean = (ht || '').replace(/\\s+/g, '');
-    if (currentHTFilter === 'all') return true;
-    if (currentHTFilter === 'combo') return ['1:0', '2:0', '0:1', '0:2'].includes(clean);
-    if (currentHTFilter === '1-0') return clean === '1:0';
-    if (currentHTFilter === '2-0') return clean === '2:0';
-    if (currentHTFilter === '0-1') return clean === '0:1';
-    if (currentHTFilter === '0-2') return clean === '0:2';
-    if (currentHTFilter === '0-0') return clean === '0:0';
-    return true;
-  }
+      if (curDate === 'today') {
+        if (mIso !== todayISO) return false;
+      } else if (curDate === 'yesterday') {
+        if (diffDays !== 1) return false;
+      } else if (curDate === '7d') {
+        if (diffDays < 0 || diffDays > 7) return false;
+      } else if (curDate === '30d') {
+        if (diffDays < 0 || diffDays > 30) return false;
+      } else if (curDate === '56d') {
+        if (diffDays < 0 || diffDays > 56) return false;
+      } else if (curDate === 'custom') {
+        if (customDateISO && mIso !== customDateISO) return false;
+      }
 
-  function getFilteredMatches() {
-    const search = document.getElementById('searchInput').value.trim().toLowerCase();
-    const selectedLeague = document.getElementById('leagueSelect').value;
-
-    return matchesData.filter(m => {
-      const dIso = m.dateISO || toISO(m.dateText);
-      if (!checkDateCriteria(dIso)) return false;
-      if (!checkHTCriteria(m.htScore)) return false;
-      if (selectedLeague && selectedLeague !== 'all' && m.league !== selectedLeague) return false;
-      if (search) {
-        const text = `${m.code || ''} ${m.league || ''} ${m.home || ''} ${m.away || ''}`.toLowerCase();
-        if (!text.includes(search)) return false;
+      // Search keyword
+      if (q) {
+        const text = `${m.code || ''} ${m.league || ''} ${m.home || ''} ${m.away || ''} ${m.dateText || ''}`.toLowerCase();
+        if (!text.includes(q)) return false;
       }
       return true;
     });
-  }
 
-  function renderMatches() {
-    const filtered = getFilteredMatches();
-    const listContainer = document.getElementById('matchesList');
-    const emptyState = document.getElementById('emptyState');
-    const displayCount = document.getElementById('displayCount');
+    document.getElementById('displayCount').textContent = filtered.length;
+    document.getElementById('matchCount').textContent = filtered.filter(m => ['1:0','2:0','0:1','0:2'].includes((m.htScore||'').replace(/\s+/g,''))).length;
 
-    displayCount.textContent = filtered.length;
-    document.getElementById('filteredMatchesCount').textContent = filtered.filter(m => ['1:0','2:0','0:1','0:2'].includes((m.htScore||'').replace(/\\s+/g,''))).length;
+    const dateLabelMap = {
+      'today': `今天 (${todayISO})`,
+      'yesterday': `昨天`,
+      '7d': '過去 7 天賽事',
+      '30d': '過去 30 天賽事',
+      '56d': '過去 56 天紀錄',
+      'all': '全部歷史紀錄',
+      'custom': `指定日期: ${customDateISO}`
+    };
+    document.getElementById('dateLabel').textContent = dateLabelMap[curDate] || '賽事列表';
+
+    const list = document.getElementById('matchesList');
+    const empty = document.getElementById('emptyBox');
 
     if (filtered.length === 0) {
-      listContainer.innerHTML = '';
-      emptyState.style.display = 'block';
-      updateStatisticsForScope(filtered);
+      list.innerHTML = '';
+      empty.style.display = 'block';
       return;
     }
-    emptyState.style.display = 'none';
+    empty.style.display = 'none';
 
-    listContainer.innerHTML = filtered.map(m => {
-      const isTarget = ['1:0', '2:0', '0:1', '0:2'].includes((m.htScore||'').replace(/\\s+/g, ''));
+    list.innerHTML = filtered.map(m => {
+      const isTarget = ['1:0','2:0','0:1','0:2'].includes((m.htScore||'').replace(/\s+/g, ''));
+      const realIdx = matches.indexOf(m);
       return `
-        <div class="hkjc-item ${isTarget ? 'matched-ht' : ''}">
-          <div class="item-header">
-            <span class="item-date">${m.dateText} ${m.code ? m.code : ''}</span>
-            <span class="item-league">${m.league}</span>
-          </div>
-
-          <div class="item-teams-line">
-            <div class="team-box">
-              <span class="tag-role">[主]</span>
-              <span>${m.home}</span>
+        <div class="compact-row ${isTarget ? 'matched' : ''}" onclick="openDetail(${realIdx})">
+          <div class="col-meta-teams">
+            <div class="line-meta">
+              <span class="meta-code">${m.dateText} ${m.code ? m.code : ''}</span>
+              <span>·</span>
+              <span class="meta-league">${m.league}</span>
             </div>
-            <span class="vs-text">對</span>
-            <div class="team-box">
-              <span>${m.away}</span>
-              <span class="tag-role away">[客]</span>
+            <div class="line-teams">
+              <span class="team-name" style="color: ${isTarget && (m.htScore.startsWith('1:') || m.htScore.startsWith('2:')) ? '#38bdf8' : '#fff'};">${m.home}</span>
+              <span class="vs-tag">對</span>
+              <span class="team-name" style="color: ${isTarget && (m.htScore.endsWith(':1') || m.htScore.endsWith(':2')) ? '#f59e0b' : '#fff'};">${m.away}</span>
             </div>
           </div>
-
-          <div class="item-score-line">
-            <span class="ft-score">${m.ftScore}</span>
-            <span class="ht-score-badge ${isTarget ? 'highlight' : ''}">(${m.htScore})</span>
+          <div class="col-scores">
+            <div class="score-ft">${m.ftScore}</div>
+            <div class="badge-ht ${isTarget ? 'hit' : ''}">半 ${m.htScore}</div>
+            <div class="arrow-icon">&gt;</div>
           </div>
         </div>
       `;
     }).join('');
-
-    updateStatisticsForScope(filtered);
   }
 
-  function updateStatisticsForScope(data) {
-    document.getElementById('totalMatchesCount').textContent = data.length;
-    let leadCount = 0, winCount = 0, totalGoals = 0;
-    data.forEach(m => {
-      const [hHT, aHT] = (m.htScore || '0:0').split(':').map(Number);
-      const [hFT, aFT] = (m.ftScore || '0:0').split(':').map(Number);
-      totalGoals += (hFT + aFT);
-      if (hHT !== aHT) {
-        leadCount++;
-        const htLeader = hHT > aHT ? 'home' : 'away';
-        const ftWinner = hFT > aFT ? 'home' : hFT < aFT ? 'away' : 'draw';
-        if (htLeader === ftWinner) winCount++;
-      }
-    });
-    document.getElementById('leadConversionRate').textContent = leadCount > 0 ? `${((winCount / leadCount) * 100).toFixed(1)}%` : '0%';
-    document.getElementById('avgGoals').textContent = data.length > 0 ? (totalGoals / data.length).toFixed(2) : '0.0';
+  function openDetail(idx) {
+    const m = matches[idx];
+    if (!m) return;
+    document.getElementById('modalTitle').textContent = `${m.dateText} ${m.code ? m.code : ''} · ${m.league}`;
+    document.getElementById('modalHome').textContent = `[主] ${m.home}`;
+    document.getElementById('modalAway').textContent = `${m.away} [客]`;
+    document.getElementById('modalFT').textContent = m.ftScore;
+    document.getElementById('modalHT').textContent = `半場比數：${m.htScore} (全場完)`;
+    document.getElementById('modalLeague').textContent = m.league;
+    document.getElementById('modalDate').textContent = m.dateText;
+    document.getElementById('detailModal').classList.add('show');
+  }
+
+  function closeDetailModal() {
+    document.getElementById('detailModal').classList.remove('show');
   }
 
   function exportCSV() {
-    const filtered = getFilteredMatches();
-    let csv = '\uFEFF日期,聯賽,主隊,客隊,全場比數,半場比數\n';
-    filtered.forEach(m => {
-      csv += `"${m.dateText}","${m.league}","${m.home}","${m.away}","${m.ftScore}","${m.htScore}"\n`;
-    });
+    let csv = '\uFEFF球賽編號,日期,聯賽,主隊,客隊,全場比數,半場比數\n';
+    matches.forEach(m => csv += `"${m.code || ''}","${m.dateText}","${m.league}","${m.home}","${m.away}","${m.ftScore}","${m.htScore}"\n`);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `HKJC_Matches_${currentDateRange}_${new Date().toISOString().slice(0,10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `HKJC_Matches_${curDate}.csv`;
+    a.click();
   }
 </script>
-
 </body>
 </html>
