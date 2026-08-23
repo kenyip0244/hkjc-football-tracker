@@ -305,7 +305,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .team-name { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+    .team-name { max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
     .vs-tag { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
 
     .col-scores {
@@ -715,7 +715,7 @@
       return;
     }
     localStorage.setItem('football_api_key', k);
-    alert('API Key 儲存成功！正在連線抓取最新賽事...');
+    alert('API Key 儲存成功！正在連線抓取最新賽事並自動翻譯為繁體中文...');
     triggerOnlineFetch(true);
   }
 
@@ -765,99 +765,83 @@
   }
 
   // 1. Built-in Comprehensive Chinese Translation Dictionary
-  const TC_DICT = {
-    "Premier League": "英格蘭超級聯賽", "Championship": "英格蘭冠軍聯賽", "FA Cup": "英格蘭足總盃", "League Cup": "英格蘭聯賽盃", "EFL Cup": "英格蘭聯賽盃",
-    "La Liga": "西班牙甲組聯賽", "Copa del Rey": "西班牙盃", "Serie A": "意大利甲組聯賽", "Coppa Italia": "意大利盃", "Bundesliga": "德國甲組聯賽",
-    "2. Bundesliga": "德國乙組聯賽", "DFB Pokal": "德國盃", "Ligue 1": "法國甲組聯賽", "Ligue 2": "法國乙組聯賽", "Coupe de France": "法國盃",
-    "UEFA Champions League": "歐洲聯賽冠軍盃", "UEFA Europa League": "歐霸盃", "UEFA Europa Conference League": "歐洲協會聯賽", "UEFA Nations League": "歐洲國家聯賽",
-    "Allsvenskan": "瑞典超級聯賽", "Saudi Pro League": "沙特超級聯賽", "Stars League": "卡塔爾星級聯賽", "Major League Soccer": "美國職業聯賽",
-    "J1 League": "日本職業聯賽", "J2 League": "日本乙組聯賽", "K League 1": "南韓職業聯賽", "Primera Division": "烏拉圭甲組聯賽", "Jupiler Pro League": "比利時甲組聯賽",
-    "Eredivisie": "荷蘭甲組聯賽", "Primeira Liga": "葡萄牙超級聯賽", "Copa Libertadores": "南美自由盃", "Copa Sudamericana": "南美球會盃", "Serie A Brazil": "巴西甲組聯賽",
-    "Copa America": "美洲國家盃", "Euro Championship": "歐洲國家盃",
-    "Arsenal": "阿仙奴", "Chelsea": "車路士", "Liverpool": "利物浦", "Manchester City": "曼城", "Manchester United": "曼聯", "Tottenham": "熱刺",
-    "Newcastle": "紐卡素", "Aston Villa": "阿士東維拉", "West Ham": "韋斯咸", "Brighton": "白禮頓", "Coventry": "高雲地利", "Bournemouth": "般尼茅夫",
-    "Fulham": "富咸", "Everton": "愛華頓", "Southampton": "修咸頓", "Wolves": "狼隊", "Wolverhampton Wanderers": "狼隊", "Brentford": "賓福特",
-    "Crystal Palace": "水晶宮", "Leicester": "李斯特城", "Nottingham Forest": "諾定咸森林", "Ipswich": "葉士域治",
-    "Real Madrid": "皇家馬德里", "Barcelona": "巴塞隆拿", "Atletico Madrid": "馬德里體育會", "Sevilla": "西維爾", "Villarreal": "維拉利爾",
-    "Athletic Club": "畢爾包", "Real Sociedad": "皇家蘇斯達", "Real Betis": "貝迪斯", "Valencia": "華倫西亞", "Getafe": "基達菲", "Girona": "基羅納",
-    "Celta Vigo": "切爾達", "Rayo Vallecano": "華歷簡奴", "Espanyol": "愛斯賓奴", "Mallorca": "馬略卡", "Alaves": "艾拉維斯", "Osasuna": "奧沙辛拿",
-    "Las Palmas": "拉斯彭馬斯", "Valladolid": "華拉度列", "Leganes": "利根尼斯",
-    "Bayern Munich": "拜仁慕尼黑", "Borussia Dortmund": "多蒙特", "Bayer Leverkusen": "利華古遜", "RB Leipzig": "RB萊比錫", "VfB Stuttgart": "史特加",
-    "Eintracht Frankfurt": "法蘭克福", "Borussia Monchengladbach": "慕遜加柏", "Wolfsburg": "禾夫斯堡", "SC Freiburg": "費雷堡", "Hoffenheim": "賀芬咸",
-    "Augsburg": "奧格斯堡", "Mainz 05": "緬恩斯", "Union Berlin": "柏林聯", "Werder Bremen": "雲達不萊梅", "VfL Bochum": "波琴", "FC St. Pauli": "聖保利",
-    "Holstein Kiel": "基爾", "Hansa Rostock": "羅斯托克",
-    "Inter": "國際米蘭", "AC Milan": "AC米蘭", "Juventus": "祖雲達斯", "Napoli": "拿玻里", "AS Roma": "羅馬", "Lazio": "拉素", "Atalanta": "阿特蘭大",
-    "Fiorentina": "費倫天拿", "Bologna": "博洛尼亞", "Torino": "拖連奴", "Monza": "蒙沙", "Genoa": "熱拿亞", "Verona": "維羅納", "Como": "科木",
-    "Parma": "帕爾馬", "Venezia": "威尼斯", "Empoli": "安玻里", "Cagliari": "卡利亞里", "Lecce": "萊切", "Udinese": "烏甸尼斯",
-    "Paris Saint Germain": "巴黎聖日耳門", "Marseille": "馬賽", "Lyon": "里昂", "Monaco": "摩納哥", "Lille": "里爾", "Lens": "朗斯", "Rennes": "雷恩",
-    "Nice": "尼斯", "Strasbourg": "斯特拉斯堡", "Toulouse": "圖盧茲", "Montpellier": "蒙彼利埃", "Reims": "蘭斯", "Nantes": "南特", "Brest": "比斯特",
-    "Saint Etienne": "聖伊天", "Angers": "昂熱", "Auxerre": "歐塞爾", "Le Havre": "勒哈弗爾", "Sochaux": "索察", "Guingamp": "甘岡",
-    "Clermont": "克萊蒙特", "Dijon": "第戎", "Pau": "FC波城", "Nancy": "南錫", "Dunkerque": "登卡基",
-    "Sirius": "天狼星", "BK Hacken": "赫根", "Malmo FF": "馬模", "AIK": "AIK蘇納", "Djurgardens IF": "佐加頓斯",
-    "Al-Riyadh": "艾利雅德", "Al-Nassr": "艾納斯", "Al-Hilal": "希拉爾", "Al-Ittihad": "伊蒂哈德", "Al-Ahli": "吉達艾阿里", "Al-Najma": "艾拿積馬",
-    "Yokohama F. Marinos": "橫濱水手", "Kawasaki Frontale": "川崎前鋒", "Vissel Kobe": "神戶勝利船", "Urawa Red Diamonds": "浦和紅鑽",
-    "Sanfrecce Hiroshima": "廣島三箭", "Nagoya Grampus": "名古屋鯨魚", "Gamba Osaka": "大阪鋼巴", "Cerezo Osaka": "大阪櫻花", "Kashima Antlers": "鹿島鹿角",
-    "FC Tokyo": "FC東京", "Machida Zelvia": "町田澤維亞",
-    "Inter Miami": "邁阿密國際", "LA Galaxy": "洛杉磯銀河", "San Jose Earthquakes": "聖荷西地震", "FC Cincinnati": "FC辛辛那提",
-    "Columbus Crew": "哥倫布機員", "Seattle Sounders": "西雅圖海灣者",
-    "Flamengo": "法林明高", "Palmeiras": "彭美拉斯", "Botafogo": "保地花高", "Cruzeiro": "高士路", "Sao Paulo": "聖保羅", "Gremio": "甘美奧",
-    "Athletico-PR": "帕拉尼恩斯", "Bahia": "巴希亞", "Standard Liege": "標準列治", "RAAL La Louviere": "拉路維爾", "Albion FC": "艾比安FC",
-    "Boston River": "波士頓河", "Jagiellonia": "積基朗尼亞", "FK Panevezys": "考諾", "Besiktas": "比錫達斯", "Hearts": "赫斯",
-    "Rapid Vienna": "維也納迅速", "Celtic": "些路迪", "Galatasaray": "加拉塔沙雷", "Salzburg": "薩爾斯堡", "Argentina": "阿根廷", "Colombia": "哥倫比亞",
-    "Huracan": "颶風隊", "Deportivo Riestra": "列斯特拉體育會", "Newells Old Boys": "紐維爾舊生", "Newell's Old Boys": "紐維爾舊生", "Banfield": "班菲爾德",
-    "Birmingham Legion": "伯明翰軍團", "Sporting JAX": "積遜維爾競技", "Forward Madison": "麥迪遜前鋒", "U. Catolica": "天主教大學", "Nublense": "紐布倫斯",
-    "Orense SC": "奧倫斯", "Deportivo Garcilaso": "加西拉索體育會", "Cusco": "庫斯科", "Antigua GFC": "安提瓜GFC", "Comunicaciones": "通訊隊",
-    "Isidro Metapan": "梅塔潘", "Isidro Metapán": "梅塔潘", "Alianza": "阿里安沙", "Cruz Azul W": "藍十字女足", "Tigres UANL W": "堤格雷斯女足",
-    "Nashville SC": "納士維", "Columbus Crew": "哥倫布機員", "St. Louis City": "聖路易斯城", "Houston Dynamo": "休斯敦戴拿模",
-    "Corpus Christi": "科珀斯克里斯蒂", "Westchester SC": "威徹斯特SC", "Dallas Trinity W": "達拉斯三一女足", "Carolina Ascent": "卡羅萊納晉升女足",
-    "Portland Thorns": "波特蘭荊棘女足", "Denver Summit": "丹佛頂峰女足", "North Texas": "北德克薩斯", "Minnesota United": "明尼蘇達聯",
-    "Liga Pro": "厄瓜多爾甲組聯賽", "USL League One": "USL甲組聯賽", "USL Championship": "USL冠軍聯賽", "USL Super League": "USL超級聯賽",
-    "Liga MX Femenil": "墨西哥女子甲組聯賽", "NWSL Women": "美國女子國家聯賽", "MLS Next Pro": "美職預備組聯賽", "Primera Division": "美洲甲組聯賽"
-  };
+  const TC_DICT = {"Premier League": "英格蘭超級聯賽", "Championship": "英格蘭冠軍聯賽", "FA Cup": "英格蘭足總盃", "League Cup": "英格蘭聯賽盃", "EFL Cup": "英格蘭聯賽盃", "La Liga": "西班牙甲組聯賽", "Copa del Rey": "西班牙盃", "Serie A": "意大利甲組聯賽", "Coppa Italia": "意大利盃", "Bundesliga": "德國甲組聯賽", "2. Bundesliga": "德國乙組聯賽", "DFB Pokal": "德國盃", "Ligue 1": "法國甲組聯賽", "Ligue 2": "法國乙組聯賽", "Coupe de France": "法國盃", "UEFA Champions League": "歐洲聯賽冠軍盃", "UEFA Europa League": "歐霸盃", "UEFA Europa Conference League": "歐洲協會聯賽", "UEFA Nations League": "歐洲國家聯賽", "Allsvenskan": "瑞典超級聯賽", "Saudi Pro League": "沙特超級聯賽", "Stars League": "卡塔爾星級聯賽", "Major League Soccer": "美國職業聯賽", "J1 League": "日本職業聯賽", "J2 League": "日本乙組聯賽", "K League 1": "南韓職業聯賽", "Primera Division": "美洲甲組聯賽", "Jupiler Pro League": "比利時甲組聯賽", "Eredivisie": "荷蘭甲組聯賽", "Primeira Liga": "葡萄牙超級聯賽", "Copa Libertadores": "南美自由盃", "Copa Sudamericana": "南美球會盃", "Serie A Brazil": "巴西甲組聯賽", "Copa America": "美洲國家盃", "Euro Championship": "歐洲國家盃", "Arsenal": "阿仙奴", "Chelsea": "車路士", "Liverpool": "利物浦", "Manchester City": "曼城", "Manchester United": "曼聯", "Tottenham": "熱刺", "Newcastle": "紐卡素", "Aston Villa": "阿士東維拉", "West Ham": "韋斯咸", "Brighton": "白禮頓", "Coventry": "高雲地利", "Bournemouth": "般尼茅夫", "Fulham": "富咸", "Everton": "愛華頓", "Southampton": "修咸頓", "Wolves": "狼隊", "Wolverhampton Wanderers": "狼隊", "Brentford": "賓福特", "Crystal Palace": "水晶宮", "Leicester": "李斯特城", "Nottingham Forest": "諾定咸森林", "Ipswich": "葉士域治", "Real Madrid": "皇家馬德里", "Barcelona": "巴塞隆拿", "Atletico Madrid": "馬德里體育會", "Sevilla": "西維爾", "Villarreal": "維拉利爾", "Athletic Club": "畢爾包", "Real Sociedad": "皇家蘇斯達", "Real Betis": "貝迪斯", "Valencia": "華倫西亞", "Getafe": "基達菲", "Girona": "基羅納", "Celta Vigo": "切爾達", "Rayo Vallecano": "華歷簡奴", "Espanyol": "愛斯賓奴", "Mallorca": "馬略卡", "Alaves": "艾拉維斯", "Osasuna": "奧沙辛拿", "Las Palmas": "拉斯彭馬斯", "Valladolid": "華拉度列", "Leganes": "利根尼斯", "Bayern Munich": "拜仁慕尼黑", "Borussia Dortmund": "多蒙特", "Bayer Leverkusen": "利華古遜", "RB Leipzig": "RB萊比錫", "VfB Stuttgart": "史特加", "Eintracht Frankfurt": "法蘭克福", "Borussia Monchengladbach": "慕遜加柏", "Wolfsburg": "禾夫斯堡", "SC Freiburg": "費雷堡", "Hoffenheim": "賀芬咸", "Augsburg": "奧格斯堡", "Mainz 05": "緬恩斯", "Union Berlin": "柏林聯", "Werder Bremen": "雲達不萊梅", "VfL Bochum": "波琴", "FC St. Pauli": "聖保利", "Holstein Kiel": "基爾", "Hansa Rostock": "羅斯托克", "Inter": "國際米蘭", "AC Milan": "AC米蘭", "Juventus": "祖雲達斯", "Napoli": "拿玻里", "AS Roma": "羅馬", "Lazio": "拉素", "Atalanta": "阿特蘭大", "Fiorentina": "費倫天拿", "Bologna": "博洛尼亞", "Torino": "拖連奴", "Monza": "蒙沙", "Genoa": "熱拿亞", "Verona": "維羅納", "Como": "科木", "Parma": "帕爾馬", "Venezia": "威尼斯", "Empoli": "安玻里", "Cagliari": "卡利亞里", "Lecce": "萊切", "Udinese": "烏甸尼斯", "Paris Saint Germain": "巴黎聖日耳門", "Marseille": "馬賽", "Lyon": "里昂", "Monaco": "摩納哥", "Lille": "里爾", "Lens": "朗斯", "Rennes": "雷恩", "Nice": "尼斯", "Strasbourg": "斯特拉斯堡", "Toulouse": "圖盧茲", "Montpellier": "蒙彼利埃", "Reims": "蘭斯", "Nantes": "南特", "Brest": "比斯特", "Saint Etienne": "聖伊天", "Angers": "昂熱", "Auxerre": "歐塞爾", "Le Havre": "勒哈弗爾", "Sochaux": "索察", "Guingamp": "甘岡", "Clermont": "克萊蒙特", "Dijon": "第戎", "Pau": "FC波城", "Nancy": "南錫", "Dunkerque": "登卡基", "Sirius": "天狼星", "BK Hacken": "赫根", "Malmo FF": "馬模", "AIK": "AIK蘇納", "Djurgardens IF": "佐加頓斯", "Al-Riyadh": "艾利雅德", "Al-Nassr": "艾納斯", "Al-Hilal": "希拉爾", "Al-Ittihad": "伊蒂哈德", "Al-Ahli": "吉達艾阿里", "Al-Najma": "艾拿積馬", "Yokohama F. Marinos": "橫濱水手", "Kawasaki Frontale": "川崎前鋒", "Vissel Kobe": "神戶勝利船", "Urawa Red Diamonds": "浦和紅鑽", "Sanfrecce Hiroshima": "廣島三箭", "Nagoya Grampus": "名古屋鯨魚", "Gamba Osaka": "大阪鋼巴", "Cerezo Osaka": "大阪櫻花", "Kashima Antlers": "鹿島鹿角", "FC Tokyo": "FC東京", "Machida Zelvia": "町田澤維亞", "Inter Miami": "邁阿密國際", "LA Galaxy": "洛杉磯銀河", "San Jose Earthquakes": "聖荷西地震", "FC Cincinnati": "FC辛辛那提", "Columbus Crew": "哥倫布機員", "Seattle Sounders": "西雅圖海灣者", "Flamengo": "法林明高", "Palmeiras": "彭美拉斯", "Botafogo": "保地花高", "Cruzeiro": "高士路", "Sao Paulo": "聖保羅", "Gremio": "甘美奧", "Athletico-PR": "帕拉尼恩斯", "Bahia": "巴希亞", "Standard Liege": "標準列治", "RAAL La Louviere": "拉路維爾", "Albion FC": "艾比安FC", "Boston River": "波士頓河", "Jagiellonia": "積基朗尼亞", "FK Panevezys": "考諾", "Besiktas": "比錫達斯", "Hearts": "赫斯", "Rapid Vienna": "維也納迅速", "Celtic": "些路迪", "Galatasaray": "加拉塔沙雷", "Salzburg": "薩爾斯堡", "Argentina": "阿根廷", "Colombia": "哥倫比亞", "Veraguas": "維拉瓜斯", "Veraguas United": "維拉瓜斯聯", "San Francisco": "舊金山FC", "San Francisco FC": "舊金山FC", "Independiente": "獨立隊", "Independiente Medellin": "麥德林獨立", "Independiente Santa Fe": "聖達菲獨立", "Cucuta": "古古達", "Cúcuta Deportivo": "古古達", "Juarez W": "華雷斯女足", "Juárez W": "華雷斯女足", "FC Juarez": "華雷斯", "Santos Laguna": "仙度士拉古納", "Santos Laguna W": "仙度士拉古納女足", "Real Esteli": "皇家艾斯迪利", "Real Estelí": "皇家艾斯迪利", "Diriangen": "迪利安格恩", "Diriangén": "迪利安格恩", "Piratas": "海盜隊", "Cancun": "坎昆", "Cancún": "坎昆", "Cancún FC": "坎昆FC", "CDS Tampico Madero": "坦皮科馬德羅", "CDS Tampico...": "坦皮科馬德羅", "Alebrijes de Oaxaca": "瓦哈卡", "Alebrijes de O...": "瓦哈卡", "Durango": "杜蘭戈", "Leones Negros": "黑獅隊", "Leones Negro...": "黑獅隊", "Puebla": "普埃布拉", "Puebla W": "普埃布拉女足", "Central Norte": "北方中央", "CA Estudiantes": "學生體育會", "Estudiantes": "學生隊", "Huracan": "颶風隊", "Huracán": "颶風隊", "Deportivo Riestra": "列斯特拉體育會", "Newells Old Boys": "紐維爾舊生", "Newell's Old Boys": "紐維爾舊生", "Banfield": "班菲爾德", "U. Catolica": "天主教大學", "Nublense": "紐布倫斯", "Ñublense": "紐布倫斯", "Orense SC": "奧倫斯", "Deportivo Garcilaso": "加西拉索體育會", "Cusco": "庫斯科", "Antigua GFC": "安提瓜GFC", "Comunicaciones": "通訊隊", "Isidro Metapan": "梅塔潘", "Isidro Metapán": "梅塔潘", "Alianza": "阿里安沙", "Cruz Azul W": "藍十字女足", "Tigres UANL W": "堤格雷斯女足", "Nashville SC": "納士維", "St. Louis City": "聖路易斯城", "Houston Dynamo": "休斯敦戴拿模", "Corpus Christi": "科珀斯克里斯蒂", "Westchester SC": "威徹斯特SC", "Dallas Trinity W": "達拉斯三一女足", "Carolina Ascent": "卡羅萊納晉升女足", "Portland Thorns": "波特蘭荊棘女足", "Denver Summit": "丹佛頂峰女足", "North Texas": "北德克薩斯", "Minnesota United": "明尼蘇達聯", "San Antonio": "聖安東尼奧", "Oakland Roots": "奧克蘭根源", "Austin": "柯士甸", "Philadelphia Union": "費城聯", "Liga Pro": "厄瓜多爾甲組聯賽", "USL League One": "USL甲組聯賽", "USL Championship": "USL冠軍聯賽", "USL Super League": "USL超級聯賽", "Liga MX Femenil": "墨西哥女子甲組聯賽", "NWSL Women": "美國女子國家聯賽", "MLS Next Pro": "美職預備組聯賽", "Primera A": "哥倫比亞甲組聯賽", "Primera B": "哥倫比亞乙組聯賽", "Primera Nacional": "阿根廷乙組聯賽", "LPF": "巴拿馬聯賽"};
 
-  // 2. Automatic Chinese Translation Function (Dictionary + Dynamic Online Translator)
+  // 2. Real-Time Online Auto-Translator (Google Translate Client Engine)
   function translateChinese(name) {
     if (!name) return '';
     if (localStorage.getItem('auto_translate') === 'false') return name;
     if (/[\u4e00-\u9fa5]/.test(name)) return name;
 
+    // A. Check dictionary
     if (TC_DICT[name]) return TC_DICT[name];
 
+    // B. Check local translation cache
     try {
       const cache = JSON.parse(localStorage.getItem('online_trans_cache') || '{}');
       if (cache[name]) return cache[name];
     } catch(e) {}
 
-    triggerAsyncTranslation(name);
+    // C. Trigger background Google Translate fetch
+    triggerOnlineGoogleTranslate(name);
+
     return name;
   }
 
-  const pendingTranslations = new Set();
-  async function triggerAsyncTranslation(name) {
-    if (pendingTranslations.has(name)) return;
-    pendingTranslations.add(name);
+  const translationQueue = new Set();
+  async function triggerOnlineGoogleTranslate(name) {
+    if (translationQueue.has(name)) return;
+    translationQueue.add(name);
 
     try {
-      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(name)}&langpair=en|zh-TW`;
-      const res = await fetch(url);
-      const json = await res.json();
-      if (json && json.responseData && json.responseData.translatedText) {
-        let tc = json.responseData.translatedText;
+      // Primary: Google Translate Client Web API (Free, Real-time)
+      const gUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=zh-TW&dt=t&q=' + encodeURIComponent(name);
+      const res = await fetch(gUrl);
+      const data = await res.json();
+      if (data && data[0] && data[0][0] && data[0][0][0]) {
+        const tc = data[0][0][0];
         if (/[\u4e00-\u9fa5]/.test(tc)) {
-          const cache = JSON.parse(localStorage.getItem('online_trans_cache') || '{}');
-          cache[name] = tc;
-          localStorage.setItem('online_trans_cache', JSON.stringify(cache));
-
-          matches.forEach(m => {
-            if (m.home === name) m.home = tc;
-            if (m.away === name) m.away = tc;
-            if (m.league === name) m.league = tc;
-          });
-          populateLeagues();
-          render();
+          saveAndApplyTranslation(name, tc);
+          return;
         }
       }
     } catch(e) {}
+
+    try {
+      // Fallback: MyMemory API
+      const mUrl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(name) + '&langpair=en|zh-TW';
+      const res = await fetch(mUrl);
+      const json = await res.json();
+      if (json && json.responseData && json.responseData.translatedText) {
+        const tc = json.responseData.translatedText;
+        if (/[\u4e00-\u9fa5]/.test(tc)) {
+          saveAndApplyTranslation(name, tc);
+        }
+      }
+    } catch(e) {}
+  }
+
+  function saveAndApplyTranslation(rawName, tcName) {
+    const cache = JSON.parse(localStorage.getItem('online_trans_cache') || '{}');
+    cache[rawName] = tcName;
+    localStorage.setItem('online_trans_cache', JSON.stringify(cache));
+
+    matches.forEach(m => {
+      if (m.home === rawName) m.home = tcName;
+      if (m.away === rawName) m.away = tcName;
+      if (m.league === rawName) m.league = tcName;
+    });
+
+    populateLeagues();
+    render();
+  }
+
+  function batchTranslateMatches(matchList) {
+    matchList.forEach(m => {
+      if (!/[\u4e00-\u9fa5]/.test(m.home) && !TC_DICT[m.home]) triggerOnlineGoogleTranslate(m.home);
+      if (!/[\u4e00-\u9fa5]/.test(m.away) && !TC_DICT[m.away]) triggerOnlineGoogleTranslate(m.away);
+      if (!/[\u4e00-\u9fa5]/.test(m.league) && !TC_DICT[m.league]) triggerOnlineGoogleTranslate(m.league);
+    });
   }
 
   // ZERO PRE-ENTERED / MOCK DATA (100% Real API/Online Only)
@@ -904,6 +888,7 @@
           }));
           populateLeagues();
           render();
+          batchTranslateMatches(matches);
           document.getElementById('statusText').textContent = `🟢 已載入本地實時數據 (${matches.length} 場)`;
         }
       } catch(e) {}
@@ -971,6 +956,7 @@
               if (htH !== null && htA !== null && ftH !== null && ftA !== null) {
                 const dStr = item.fixture?.date?.slice(0,10) || d;
                 const parts = dStr.split('-');
+                const cleanDateText = (parts.length === 3) ? `${parts}/${parts}/${parts[0]}` : dStr;
                 const rawLeague = item.league?.name || '足球聯賽';
                 const rawHome = item.teams?.home?.name || '主隊';
                 const rawAway = item.teams?.away?.name || '客隊';
@@ -978,7 +964,7 @@
                 const mObj = {
                   code: `FB${String(item.fixture?.id||'').slice(-4)}`,
                   id: String(item.fixture?.id),
-                  dateText: `${parts}/${parts}/${parts[0]}`,
+                  dateText: cleanDateText,
                   dateISO: dStr,
                   league: translateChinese(rawLeague),
                   home: translateChinese(rawHome),
@@ -998,9 +984,10 @@
       localStorage.setItem('cached_online_matches', JSON.stringify(matches));
       populateLeagues();
       render();
+      batchTranslateMatches(matches);
       loadingBox.style.display = 'none';
       statusText.textContent = `🟢 已成功自官方 API 抓取真實賽果 (${matches.length} 場賽事)`;
-      if (forceAlert) alert(`網上即時掃描完成！取得 ${matches.length} 場真實完場賽事。`);
+      if (forceAlert) alert(`網上即時掃描與自動翻譯完成！取得 ${matches.length} 場真實完場賽事。`);
     } catch (e) {
       loadingBox.style.display = 'none';
       alert('API 連線失敗，請檢查 API Key 是否正確。');
