@@ -92,7 +92,7 @@
     .btn-green { background-color: #059669; border-color: #10b981; color: #fff; }
     .btn-blue { background-color: #0284c7; border-color: #38bdf8; color: #fff; }
 
-    /* Permanent Solid API Box (不會消失) */
+    /* Permanent Solid API Box */
     .api-card {
       background-color: #162032;
       border: 1px solid var(--accent-blue);
@@ -476,7 +476,7 @@
     </div>
   </header>
 
-  <!-- Solid Permanent API Setup Card (Fixed: will NEVER close or disappear on click) -->
+  <!-- Solid Permanent API Setup Card -->
   <div class="api-card">
     <div class="api-card-header">
       <span>🔑 即時網上連線：API Key 設定</span>
@@ -803,7 +803,16 @@
     "Flamengo": "法林明高", "Palmeiras": "彭美拉斯", "Botafogo": "保地花高", "Cruzeiro": "高士路", "Sao Paulo": "聖保羅", "Gremio": "甘美奧",
     "Athletico-PR": "帕拉尼恩斯", "Bahia": "巴希亞", "Standard Liege": "標準列治", "RAAL La Louviere": "拉路維爾", "Albion FC": "艾比安FC",
     "Boston River": "波士頓河", "Jagiellonia": "積基朗尼亞", "FK Panevezys": "考諾", "Besiktas": "比錫達斯", "Hearts": "赫斯",
-    "Rapid Vienna": "維也納迅速", "Celtic": "些路迪", "Galatasaray": "加拉塔沙雷", "Salzburg": "薩爾斯堡", "Argentina": "阿根廷", "Colombia": "哥倫比亞"
+    "Rapid Vienna": "維也納迅速", "Celtic": "些路迪", "Galatasaray": "加拉塔沙雷", "Salzburg": "薩爾斯堡", "Argentina": "阿根廷", "Colombia": "哥倫比亞",
+    "Huracan": "颶風隊", "Deportivo Riestra": "列斯特拉體育會", "Newells Old Boys": "紐維爾舊生", "Newell's Old Boys": "紐維爾舊生", "Banfield": "班菲爾德",
+    "Birmingham Legion": "伯明翰軍團", "Sporting JAX": "積遜維爾競技", "Forward Madison": "麥迪遜前鋒", "U. Catolica": "天主教大學", "Nublense": "紐布倫斯",
+    "Orense SC": "奧倫斯", "Deportivo Garcilaso": "加西拉索體育會", "Cusco": "庫斯科", "Antigua GFC": "安提瓜GFC", "Comunicaciones": "通訊隊",
+    "Isidro Metapan": "梅塔潘", "Isidro Metapán": "梅塔潘", "Alianza": "阿里安沙", "Cruz Azul W": "藍十字女足", "Tigres UANL W": "堤格雷斯女足",
+    "Nashville SC": "納士維", "Columbus Crew": "哥倫布機員", "St. Louis City": "聖路易斯城", "Houston Dynamo": "休斯敦戴拿模",
+    "Corpus Christi": "科珀斯克里斯蒂", "Westchester SC": "威徹斯特SC", "Dallas Trinity W": "達拉斯三一女足", "Carolina Ascent": "卡羅萊納晉升女足",
+    "Portland Thorns": "波特蘭荊棘女足", "Denver Summit": "丹佛頂峰女足", "North Texas": "北德克薩斯", "Minnesota United": "明尼蘇達聯",
+    "Liga Pro": "厄瓜多爾甲組聯賽", "USL League One": "USL甲組聯賽", "USL Championship": "USL冠軍聯賽", "USL Super League": "USL超級聯賽",
+    "Liga MX Femenil": "墨西哥女子甲組聯賽", "NWSL Women": "美國女子國家聯賽", "MLS Next Pro": "美職預備組聯賽", "Primera Division": "美洲甲組聯賽"
   };
 
   // 2. Automatic Chinese Translation Function (Dictionary + Dynamic Online Translator)
@@ -859,7 +868,7 @@
     if (!dateStr) return '';
     if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) return dateStr.slice(0, 10);
     const p = dateStr.split('/');
-    if (p.length === 3) return `${p[2].slice(0,4)}-${p.padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+    if (p.length === 3) return `${p.slice(0,4)}-${p.padStart(2,'0')}-${p[0].padStart(2,'0')}`;
     return dateStr;
   }
 
@@ -969,7 +978,7 @@
                 const mObj = {
                   code: `FB${String(item.fixture?.id||'').slice(-4)}`,
                   id: String(item.fixture?.id),
-                  dateText: `${parts[2]}/${parts}/${parts[0]}`,
+                  dateText: `${parts}/${parts}/${parts[0]}`,
                   dateISO: dStr,
                   league: translateChinese(rawLeague),
                   home: translateChinese(rawHome),
