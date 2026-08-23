@@ -77,9 +77,9 @@
       background-color: var(--bg-secondary);
       color: var(--text-main);
       border: 1px solid var(--border-color);
-      padding: 4px 8px;
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
@@ -92,9 +92,9 @@
     .btn-green { background-color: #059669; border-color: #10b981; color: #fff; }
     .btn-blue { background-color: #0284c7; border-color: #38bdf8; color: #fff; }
 
-    /* API Setup Prompt Banner */
-    .api-banner {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(15, 23, 42, 0.85) 100%);
+    /* Permanent Solid API Box (不會消失) */
+    .api-card {
+      background-color: #162032;
       border: 1px solid var(--accent-blue);
       border-radius: 10px;
       padding: 12px 14px;
@@ -102,28 +102,44 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     }
 
-    .api-banner-title {
+    .api-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 0.88rem;
       font-weight: 800;
       color: var(--accent-blue);
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    .api-banner p {
-      font-size: 0.76rem;
+    .api-desc {
+      font-size: 0.78rem;
       color: #cbd5e1;
       line-height: 1.4;
     }
 
-    .api-input-group {
+    .api-input-row {
       display: flex;
       gap: 6px;
+      align-items: center;
       flex-wrap: wrap;
     }
+
+    .input-key {
+      background-color: #0b1120;
+      border: 1.5px solid var(--accent-blue);
+      color: #fff;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      outline: none;
+      flex: 1;
+      min-width: 200px;
+      font-family: monospace;
+    }
+    .input-key:focus { box-shadow: 0 0 8px rgba(56, 189, 248, 0.4); }
 
     /* Filter Box */
     .filter-box {
@@ -455,21 +471,24 @@
     <h1>⚽ HKJC 足球賽果半場篩選追蹤器</h1>
     <div class="header-actions">
       <button class="btn-sm btn-blue" onclick="triggerOnlineFetch(true)">🌐 即時網上抓取</button>
-      <button class="btn-sm" onclick="openSettingsModal()">⚙️ 設定 & 翻譯</button>
+      <button class="btn-sm" onclick="openSettingsModal()">⚙️ 設定</button>
       <button class="btn-sm" onclick="exportCSV()">📥 匯出</button>
     </div>
   </header>
 
-  <!-- API Key Setup Banner (Shows if no API Key is set) -->
-  <div id="apiKeyBanner" class="api-banner" style="display: none;">
-    <div class="api-banner-title">
-      <span>🔑 即時網上連線：請填寫 API Key（附免費領取教學）</span>
+  <!-- Solid Permanent API Setup Card (Fixed: will NEVER close or disappear on click) -->
+  <div class="api-card">
+    <div class="api-card-header">
+      <span>🔑 即時網上連線：API Key 設定</span>
+      <button class="btn-sm" onclick="openTutorialModal()" style="font-size: 0.72rem; padding: 2px 6px;">📖 免費領取教學</button>
     </div>
-    <p>本系統為 <strong>100% 即時線上即時抓取真實賽果</strong>（絕無預載假數據），請先輸入 API-Sports 或 RapidAPI Key 以開始查詢：</p>
-    <div class="api-input-group">
-      <input type="password" id="bannerKeyInput" class="input-sm" style="flex: 1; min-width: 200px;" placeholder="貼上你的 API-Sports 或 RapidAPI Key...">
-      <button class="btn-sm btn-blue" onclick="saveBannerKey()">💾 儲存並即時抓取</button>
-      <button class="btn-sm" onclick="openTutorialModal()">📖 2分鐘免費領取教學</button>
+    <div class="api-desc">
+      本程式為 <strong>100% 線上即時抓取真實賽果</strong>（零預載假資料）。請在此貼上 API-Sports 或 RapidAPI Key：
+    </div>
+    <div class="api-input-row">
+      <input type="text" id="mainKeyInput" class="input-key" autocomplete="off" spellcheck="false" placeholder="在此貼上你的 API Key...">
+      <button class="btn-sm btn-blue" onclick="saveMainApiKey()">💾 儲存並抓取</button>
+      <button class="btn-sm" onclick="clearApiKey()">🗑️ 清除</button>
     </div>
   </div>
 
@@ -511,7 +530,7 @@
   <!-- Status Summary -->
   <div class="status-bar">
     <div>顯示：<strong id="displayCount">0</strong> 場 | 符合半場條件：<strong id="matchCount">0</strong> 場</div>
-    <div id="statusText" style="color: var(--accent-blue); font-size: 0.72rem;">等待連線</div>
+    <div id="statusText" style="color: var(--accent-blue); font-size: 0.72rem;">等待抓取數據</div>
   </div>
 
   <!-- Loading Indicator -->
@@ -526,7 +545,7 @@
   <!-- Empty Box -->
   <div id="emptyBox" style="text-align:center; padding: 40px 10px; color: var(--text-muted);">
     <h3 style="color: #fff; font-size: 0.95rem;">尚未載入線上賽事數據</h3>
-    <p style="font-size: 0.78rem; margin-top: 6px;">請先在上方填寫 API Key 或點擊「<strong style="color: var(--accent-blue);">🌐 即時網上抓取</strong>」開始即時檢索真實賽果。</p>
+    <p style="font-size: 0.78rem; margin-top: 6px;">請先在上方輸入框填寫 API Key 並點擊「<strong style="color: var(--accent-blue);">💾 儲存並抓取</strong>」。</p>
   </div>
 
   <footer>
@@ -534,9 +553,9 @@
   </footer>
 </div>
 
-<!-- Modal: API Tutorial -->
-<div id="tutorialModal" class="modal-mask" onclick="closeTutorialModal(event)">
-  <div class="modal-card" onclick="event.stopPropagation()">
+<!-- Modal: API Tutorial (免費申請教學) -->
+<div id="tutorialModal" class="modal-mask" onclick="handleMaskClick(event, 'tutorialModal')">
+  <div class="modal-card">
     <div class="modal-header">
       <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">📖 2分鐘免費領取足球 API Key 教學</div>
       <button class="btn-sm" onclick="closeTutorialModal()">✕ 關閉</button>
@@ -557,20 +576,16 @@
         </div>
         <div class="tutorial-step">
           <span class="step-num">4</span>
-          <div>返回此網頁，將 Key 貼入下方設定框並按「儲存」即可開始即時線上檢索！</div>
+          <div>返回此網頁，將 Key 貼入上方輸入框並按「儲存並抓取」即可開始即時檢索！</div>
         </div>
-      </div>
-      <div class="setting-group">
-        <input type="password" id="tutKeyInput" class="input-sm" placeholder="在此貼上你的 API Key...">
-        <button class="btn-full btn-blue" onclick="saveTutKey()">💾 立即儲存 Key 並開始連線</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Modal: Settings -->
-<div id="settingsModal" class="modal-mask" onclick="closeSettingsModal(event)">
-  <div class="modal-card" onclick="event.stopPropagation()">
+<div id="settingsModal" class="modal-mask" onclick="handleMaskClick(event, 'settingsModal')">
+  <div class="modal-card">
     <div class="modal-header">
       <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">⚙️ 應用程式設定</div>
       <button class="btn-sm" onclick="closeSettingsModal()">✕ 關閉</button>
@@ -582,16 +597,6 @@
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem;">
           <span>自動將英超/外國球隊與聯賽轉為中文</span>
           <input type="checkbox" id="chkAutoTranslate" style="width: 18px; height: 18px;" checked onchange="toggleAutoTranslate()">
-        </div>
-      </div>
-
-      <!-- API Key Setting -->
-      <div class="setting-group">
-        <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">🔑 API-Sports / RapidAPI Key</div>
-        <input type="password" id="txtApiKey" class="input-sm" placeholder="輸入 API Key...">
-        <div style="display: flex; gap: 6px;">
-          <button class="btn-full btn-blue" style="flex: 1;" onclick="saveApiKeyFromSettings()">💾 儲存 Key</button>
-          <button class="btn-full" style="flex: 1;" onclick="openTutorialModal()">📖 申請教學</button>
         </div>
       </div>
 
@@ -619,8 +624,8 @@
 </div>
 
 <!-- Modal: Match Detail -->
-<div id="detailModal" class="modal-mask" onclick="closeDetailModal(event)">
-  <div class="modal-card" onclick="event.stopPropagation()">
+<div id="detailModal" class="modal-mask" onclick="handleMaskClick(event, 'detailModal')">
+  <div class="modal-card">
     <div class="modal-header">
       <div style="font-weight: 700; color: #fff; font-size: 0.9rem;" id="modalTitle">賽事詳情</div>
       <button class="btn-sm" onclick="closeDetailModal()">✕ 關閉</button>
@@ -673,8 +678,13 @@
     }
   }
 
+  function handleMaskClick(e, modalId) {
+    if (e.target.id === modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+  }
+
   function openSettingsModal() {
-    document.getElementById('txtApiKey').value = localStorage.getItem('football_api_key') || '';
     document.getElementById('chkNotification').checked = localStorage.getItem('hkjc_notify') === 'true';
     document.getElementById('chkAutoTranslate').checked = localStorage.getItem('auto_translate') !== 'false';
     document.getElementById('settingsModal').classList.add('show');
@@ -691,7 +701,6 @@
   }
 
   function openTutorialModal() {
-    document.getElementById('tutKeyInput').value = localStorage.getItem('football_api_key') || '';
     document.getElementById('tutorialModal').classList.add('show');
   }
 
@@ -699,29 +708,22 @@
     document.getElementById('tutorialModal').classList.remove('show');
   }
 
-  function saveBannerKey() {
-    const k = document.getElementById('bannerKeyInput').value.trim();
-    if (!k) { alert('請先輸入 API Key！'); return; }
+  function saveMainApiKey() {
+    const k = document.getElementById('mainKeyInput').value.trim();
+    if (!k) {
+      alert('請先輸入 API Key！');
+      return;
+    }
     localStorage.setItem('football_api_key', k);
-    document.getElementById('apiKeyBanner').style.display = 'none';
+    alert('API Key 儲存成功！正在連線抓取最新賽事...');
     triggerOnlineFetch(true);
   }
 
-  function saveTutKey() {
-    const k = document.getElementById('tutKeyInput').value.trim();
-    if (!k) { alert('請先輸入 API Key！'); return; }
-    localStorage.setItem('football_api_key', k);
-    closeTutorialModal();
-    document.getElementById('apiKeyBanner').style.display = 'none';
-    triggerOnlineFetch(true);
-  }
-
-  function saveApiKeyFromSettings() {
-    const k = document.getElementById('txtApiKey').value.trim();
-    localStorage.setItem('football_api_key', k);
-    closeSettingsModal();
-    if (k) document.getElementById('apiKeyBanner').style.display = 'none';
-    triggerOnlineFetch(true);
+  function clearApiKey() {
+    localStorage.removeItem('football_api_key');
+    document.getElementById('mainKeyInput').value = '';
+    document.getElementById('statusText').textContent = '未設定 API Key';
+    alert('API Key 已清除。');
   }
 
   async function onNotificationToggle() {
@@ -763,26 +765,61 @@
   }
 
   // 1. Built-in Comprehensive Chinese Translation Dictionary
-  const TC_DICT = {dict_json};
+  const TC_DICT = {
+    "Premier League": "英格蘭超級聯賽", "Championship": "英格蘭冠軍聯賽", "FA Cup": "英格蘭足總盃", "League Cup": "英格蘭聯賽盃", "EFL Cup": "英格蘭聯賽盃",
+    "La Liga": "西班牙甲組聯賽", "Copa del Rey": "西班牙盃", "Serie A": "意大利甲組聯賽", "Coppa Italia": "意大利盃", "Bundesliga": "德國甲組聯賽",
+    "2. Bundesliga": "德國乙組聯賽", "DFB Pokal": "德國盃", "Ligue 1": "法國甲組聯賽", "Ligue 2": "法國乙組聯賽", "Coupe de France": "法國盃",
+    "UEFA Champions League": "歐洲聯賽冠軍盃", "UEFA Europa League": "歐霸盃", "UEFA Europa Conference League": "歐洲協會聯賽", "UEFA Nations League": "歐洲國家聯賽",
+    "Allsvenskan": "瑞典超級聯賽", "Saudi Pro League": "沙特超級聯賽", "Stars League": "卡塔爾星級聯賽", "Major League Soccer": "美國職業聯賽",
+    "J1 League": "日本職業聯賽", "J2 League": "日本乙組聯賽", "K League 1": "南韓職業聯賽", "Primera Division": "烏拉圭甲組聯賽", "Jupiler Pro League": "比利時甲組聯賽",
+    "Eredivisie": "荷蘭甲組聯賽", "Primeira Liga": "葡萄牙超級聯賽", "Copa Libertadores": "南美自由盃", "Copa Sudamericana": "南美球會盃", "Serie A Brazil": "巴西甲組聯賽",
+    "Copa America": "美洲國家盃", "Euro Championship": "歐洲國家盃",
+    "Arsenal": "阿仙奴", "Chelsea": "車路士", "Liverpool": "利物浦", "Manchester City": "曼城", "Manchester United": "曼聯", "Tottenham": "熱刺",
+    "Newcastle": "紐卡素", "Aston Villa": "阿士東維拉", "West Ham": "韋斯咸", "Brighton": "白禮頓", "Coventry": "高雲地利", "Bournemouth": "般尼茅夫",
+    "Fulham": "富咸", "Everton": "愛華頓", "Southampton": "修咸頓", "Wolves": "狼隊", "Wolverhampton Wanderers": "狼隊", "Brentford": "賓福特",
+    "Crystal Palace": "水晶宮", "Leicester": "李斯特城", "Nottingham Forest": "諾定咸森林", "Ipswich": "葉士域治",
+    "Real Madrid": "皇家馬德里", "Barcelona": "巴塞隆拿", "Atletico Madrid": "馬德里體育會", "Sevilla": "西維爾", "Villarreal": "維拉利爾",
+    "Athletic Club": "畢爾包", "Real Sociedad": "皇家蘇斯達", "Real Betis": "貝迪斯", "Valencia": "華倫西亞", "Getafe": "基達菲", "Girona": "基羅納",
+    "Celta Vigo": "切爾達", "Rayo Vallecano": "華歷簡奴", "Espanyol": "愛斯賓奴", "Mallorca": "馬略卡", "Alaves": "艾拉維斯", "Osasuna": "奧沙辛拿",
+    "Las Palmas": "拉斯彭馬斯", "Valladolid": "華拉度列", "Leganes": "利根尼斯",
+    "Bayern Munich": "拜仁慕尼黑", "Borussia Dortmund": "多蒙特", "Bayer Leverkusen": "利華古遜", "RB Leipzig": "RB萊比錫", "VfB Stuttgart": "史特加",
+    "Eintracht Frankfurt": "法蘭克福", "Borussia Monchengladbach": "慕遜加柏", "Wolfsburg": "禾夫斯堡", "SC Freiburg": "費雷堡", "Hoffenheim": "賀芬咸",
+    "Augsburg": "奧格斯堡", "Mainz 05": "緬恩斯", "Union Berlin": "柏林聯", "Werder Bremen": "雲達不萊梅", "VfL Bochum": "波琴", "FC St. Pauli": "聖保利",
+    "Holstein Kiel": "基爾", "Hansa Rostock": "羅斯托克",
+    "Inter": "國際米蘭", "AC Milan": "AC米蘭", "Juventus": "祖雲達斯", "Napoli": "拿玻里", "AS Roma": "羅馬", "Lazio": "拉素", "Atalanta": "阿特蘭大",
+    "Fiorentina": "費倫天拿", "Bologna": "博洛尼亞", "Torino": "拖連奴", "Monza": "蒙沙", "Genoa": "熱拿亞", "Verona": "維羅納", "Como": "科木",
+    "Parma": "帕爾馬", "Venezia": "威尼斯", "Empoli": "安玻里", "Cagliari": "卡利亞里", "Lecce": "萊切", "Udinese": "烏甸尼斯",
+    "Paris Saint Germain": "巴黎聖日耳門", "Marseille": "馬賽", "Lyon": "里昂", "Monaco": "摩納哥", "Lille": "里爾", "Lens": "朗斯", "Rennes": "雷恩",
+    "Nice": "尼斯", "Strasbourg": "斯特拉斯堡", "Toulouse": "圖盧茲", "Montpellier": "蒙彼利埃", "Reims": "蘭斯", "Nantes": "南特", "Brest": "比斯特",
+    "Saint Etienne": "聖伊天", "Angers": "昂熱", "Auxerre": "歐塞爾", "Le Havre": "勒哈弗爾", "Sochaux": "索察", "Guingamp": "甘岡",
+    "Clermont": "克萊蒙特", "Dijon": "第戎", "Pau": "FC波城", "Nancy": "南錫", "Dunkerque": "登卡基",
+    "Sirius": "天狼星", "BK Hacken": "赫根", "Malmo FF": "馬模", "AIK": "AIK蘇納", "Djurgardens IF": "佐加頓斯",
+    "Al-Riyadh": "艾利雅德", "Al-Nassr": "艾納斯", "Al-Hilal": "希拉爾", "Al-Ittihad": "伊蒂哈德", "Al-Ahli": "吉達艾阿里", "Al-Najma": "艾拿積馬",
+    "Yokohama F. Marinos": "橫濱水手", "Kawasaki Frontale": "川崎前鋒", "Vissel Kobe": "神戶勝利船", "Urawa Red Diamonds": "浦和紅鑽",
+    "Sanfrecce Hiroshima": "廣島三箭", "Nagoya Grampus": "名古屋鯨魚", "Gamba Osaka": "大阪鋼巴", "Cerezo Osaka": "大阪櫻花", "Kashima Antlers": "鹿島鹿角",
+    "FC Tokyo": "FC東京", "Machida Zelvia": "町田澤維亞",
+    "Inter Miami": "邁阿密國際", "LA Galaxy": "洛杉磯銀河", "San Jose Earthquakes": "聖荷西地震", "FC Cincinnati": "FC辛辛那提",
+    "Columbus Crew": "哥倫布機員", "Seattle Sounders": "西雅圖海灣者",
+    "Flamengo": "法林明高", "Palmeiras": "彭美拉斯", "Botafogo": "保地花高", "Cruzeiro": "高士路", "Sao Paulo": "聖保羅", "Gremio": "甘美奧",
+    "Athletico-PR": "帕拉尼恩斯", "Bahia": "巴希亞", "Standard Liege": "標準列治", "RAAL La Louviere": "拉路維爾", "Albion FC": "艾比安FC",
+    "Boston River": "波士頓河", "Jagiellonia": "積基朗尼亞", "FK Panevezys": "考諾", "Besiktas": "比錫達斯", "Hearts": "赫斯",
+    "Rapid Vienna": "維也納迅速", "Celtic": "些路迪", "Galatasaray": "加拉塔沙雷", "Salzburg": "薩爾斯堡", "Argentina": "阿根廷", "Colombia": "哥倫比亞"
+  };
 
   // 2. Automatic Chinese Translation Function (Dictionary + Dynamic Online Translator)
   function translateChinese(name) {
     if (!name) return '';
     if (localStorage.getItem('auto_translate') === 'false') return name;
-    if (/[\u4e00-\u9fa5]/.test(name)) return name; // Already in Chinese
+    if (/[\u4e00-\u9fa5]/.test(name)) return name;
 
-    // Fast Dictionary Lookup
     if (TC_DICT[name]) return TC_DICT[name];
 
-    // Local Storage Cache Lookup
     try {
       const cache = JSON.parse(localStorage.getItem('online_trans_cache') || '{}');
       if (cache[name]) return cache[name];
     } catch(e) {}
 
-    // Trigger Async Background Online Translation for Rare / New Names
     triggerAsyncTranslation(name);
-
     return name;
   }
 
@@ -802,7 +839,6 @@
           cache[name] = tc;
           localStorage.setItem('online_trans_cache', JSON.stringify(cache));
 
-          // Update in-memory match objects and re-render
           matches.forEach(m => {
             if (m.home === name) m.home = tc;
             if (m.away === name) m.away = tc;
@@ -812,12 +848,10 @@
           render();
         }
       }
-    } catch(e) {
-      console.log('Online translation note:', e);
-    }
+    } catch(e) {}
   }
 
-  // ZERO HARDCODED MOCK DATA (100% Real API/Online Only)
+  // ZERO PRE-ENTERED / MOCK DATA (100% Real API/Online Only)
   let matches = [];
   let curDate = 'today', curHT = 'all', customDateISO = null;
 
@@ -825,7 +859,7 @@
     if (!dateStr) return '';
     if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) return dateStr.slice(0, 10);
     const p = dateStr.split('/');
-    if (p.length === 3) return `${p.slice(0,4)}-${p.padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+    if (p.length === 3) return `${p[2].slice(0,4)}-${p.padStart(2,'0')}-${p[0].padStart(2,'0')}`;
     return dateStr;
   }
 
@@ -839,19 +873,13 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initChips();
-    checkApiKeySetup();
+    
+    // Fill saved key into input
+    const savedKey = localStorage.getItem('football_api_key') || '';
+    document.getElementById('mainKeyInput').value = savedKey;
+
     loadCachedOrFetch();
   });
-
-  function checkApiKeySetup() {
-    const key = localStorage.getItem('football_api_key');
-    if (!key) {
-      document.getElementById('apiKeyBanner').style.display = 'flex';
-      document.getElementById('statusText').textContent = '未設定 API Key';
-    } else {
-      document.getElementById('apiKeyBanner').style.display = 'none';
-    }
-  }
 
   function loadCachedOrFetch() {
     const cached = localStorage.getItem('cached_online_matches');
@@ -872,7 +900,6 @@
       } catch(e) {}
     }
 
-    // If API Key is present, automatically trigger live search on load
     const key = localStorage.getItem('football_api_key');
     if (key) {
       triggerOnlineFetch(false);
@@ -883,7 +910,8 @@
   async function triggerOnlineFetch(forceAlert = false) {
     const key = localStorage.getItem('football_api_key') || '';
     if (!key) {
-      openTutorialModal();
+      alert('請先在上方輸入框輸入 API Key，並點擊「儲存並抓取」！');
+      document.getElementById('mainKeyInput').focus();
       return;
     }
 
@@ -895,7 +923,6 @@
     loadingMsg.textContent = '正在直接連接 API-Sports 網上抓取真實賽果...';
 
     try {
-      // Determine dates to query based on current active range
       const todayISO = getRealTodayISO();
       let datesToFetch = [];
 
@@ -919,7 +946,6 @@
 
       const map = new Map();
       matches.forEach(m => map.set(m.id || `${m.home}_${m.away}_${m.dateISO}`, m));
-      let newCount = 0;
 
       for (const d of datesToFetch) {
         loadingMsg.textContent = `正在抓取 ${d} 之官方完場賽果...`;
@@ -943,7 +969,7 @@
                 const mObj = {
                   code: `FB${String(item.fixture?.id||'').slice(-4)}`,
                   id: String(item.fixture?.id),
-                  dateText: `${parts}/${parts}/${parts[0]}`,
+                  dateText: `${parts[2]}/${parts}/${parts[0]}`,
                   dateISO: dStr,
                   league: translateChinese(rawLeague),
                   home: translateChinese(rawHome),
@@ -951,7 +977,6 @@
                   ftScore: `${ftH}:${ftA}`,
                   htScore: `${htH}:${htA}`
                 };
-                if (!map.has(mObj.id)) newCount++;
                 map.set(mObj.id, mObj);
               }
             }
@@ -983,7 +1008,6 @@
         document.getElementById('singleDateInput').value = '';
         render();
 
-        // If key exists and user selects range, query missing online data
         const key = localStorage.getItem('football_api_key');
         if (key && (curDate === 'yesterday' || curDate === '7d' || curDate === '30d' || curDate === '56d')) {
           triggerOnlineFetch(false);
