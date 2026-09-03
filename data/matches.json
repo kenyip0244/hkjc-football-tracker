@@ -1,5 +1,38 @@
 [
   {
+    "code": "FB09041",
+    "league": "英格蘭超級聯賽",
+    "datetime": "2026-09-04 03:00",
+    "dateStr": "2026-09-04",
+    "home": "阿仙奴",
+    "away": "高雲地利",
+    "htScore": "2:0",
+    "ftScore": "3:0",
+    "status": "完場"
+  },
+  {
+    "code": "FB09042",
+    "league": "瑞典超級聯賽",
+    "datetime": "2026-09-04 01:00",
+    "dateStr": "2026-09-04",
+    "home": "天狼星",
+    "away": "赫根",
+    "htScore": "0:1",
+    "ftScore": "1:2",
+    "status": "完場"
+  },
+  {
+    "code": "FB09043",
+    "league": "沙特超級聯賽",
+    "datetime": "2026-09-04 00:00",
+    "dateStr": "2026-09-04",
+    "home": "艾利雅德",
+    "away": "艾納斯",
+    "htScore": "0:2",
+    "ftScore": "1:4",
+    "status": "完場"
+  },
+  {
     "code": "FB09031",
     "league": "英格蘭超級聯賽",
     "datetime": "2026-09-03 03:00",
