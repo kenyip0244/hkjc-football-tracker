@@ -1,5 +1,38 @@
 [
   {
+    "code": "FB11231",
+    "league": "英格蘭超級聯賽",
+    "datetime": "2026-11-23 03:00",
+    "dateStr": "2026-11-23",
+    "home": "阿仙奴",
+    "away": "高雲地利",
+    "htScore": "2:0",
+    "ftScore": "3:0",
+    "status": "完場"
+  },
+  {
+    "code": "FB11232",
+    "league": "瑞典超級聯賽",
+    "datetime": "2026-11-23 01:00",
+    "dateStr": "2026-11-23",
+    "home": "天狼星",
+    "away": "赫根",
+    "htScore": "0:1",
+    "ftScore": "1:2",
+    "status": "完場"
+  },
+  {
+    "code": "FB11233",
+    "league": "沙特超級聯賽",
+    "datetime": "2026-11-23 00:00",
+    "dateStr": "2026-11-23",
+    "home": "艾利雅德",
+    "away": "艾納斯",
+    "htScore": "0:2",
+    "ftScore": "1:4",
+    "status": "完場"
+  },
+  {
     "code": "FB11221",
     "league": "英格蘭超級聯賽",
     "datetime": "2026-11-22 03:00",
@@ -3246,36 +3279,6 @@
     "away": "阿特蘭大",
     "htScore": "1:0",
     "ftScore": "2:0",
-    "status": "完場"
-  },
-  {
-    "code": "FB2750",
-    "league": "美洲國家盃",
-    "datetime": "2026-07-18 08:00",
-    "home": "阿根廷",
-    "away": "哥倫比亞",
-    "htScore": "1:0",
-    "ftScore": "1:0",
-    "status": "完場"
-  },
-  {
-    "code": "FB2680",
-    "league": "南美自由盃",
-    "datetime": "2026-07-08 08:30",
-    "home": "法林明高",
-    "away": "彭美拉斯",
-    "htScore": "2:0",
-    "ftScore": "2:1",
-    "status": "完場"
-  },
-  {
-    "code": "FB2615",
-    "league": "巴西甲組聯賽",
-    "datetime": "2026-06-28 07:30",
-    "home": "保地花高",
-    "away": "高士路",
-    "htScore": "2:0",
-    "ftScore": "3:0",
     "status": "完場"
   }
 ]
