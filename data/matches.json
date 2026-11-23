@@ -1,5 +1,38 @@
 [
   {
+    "code": "FB11241",
+    "league": "英格蘭超級聯賽",
+    "datetime": "2026-11-24 03:00",
+    "dateStr": "2026-11-24",
+    "home": "阿仙奴",
+    "away": "高雲地利",
+    "htScore": "2:0",
+    "ftScore": "3:0",
+    "status": "完場"
+  },
+  {
+    "code": "FB11242",
+    "league": "瑞典超級聯賽",
+    "datetime": "2026-11-24 01:00",
+    "dateStr": "2026-11-24",
+    "home": "天狼星",
+    "away": "赫根",
+    "htScore": "0:1",
+    "ftScore": "1:2",
+    "status": "完場"
+  },
+  {
+    "code": "FB11243",
+    "league": "沙特超級聯賽",
+    "datetime": "2026-11-24 00:00",
+    "dateStr": "2026-11-24",
+    "home": "艾利雅德",
+    "away": "艾納斯",
+    "htScore": "0:2",
+    "ftScore": "1:4",
+    "status": "完場"
+  },
+  {
     "code": "FB11231",
     "league": "英格蘭超級聯賽",
     "datetime": "2026-11-23 03:00",
@@ -3247,36 +3280,6 @@
     "datetime": "2026-08-12 03:00",
     "home": "些路迪",
     "away": "卡拉伯克",
-    "htScore": "1:0",
-    "ftScore": "2:0",
-    "status": "完場"
-  },
-  {
-    "code": "FB2985",
-    "league": "日本職業聯賽",
-    "datetime": "2026-08-07 18:30",
-    "home": "神戶勝利船",
-    "away": "浦和紅鑽",
-    "htScore": "2:0",
-    "ftScore": "2:0",
-    "status": "完場"
-  },
-  {
-    "code": "FB2920",
-    "league": "法國甲組聯賽",
-    "datetime": "2026-08-02 02:45",
-    "home": "巴黎聖日耳門",
-    "away": "里昂",
-    "htScore": "2:0",
-    "ftScore": "4:1",
-    "status": "完場"
-  },
-  {
-    "code": "FB2890",
-    "league": "意大利甲組聯賽",
-    "datetime": "2026-07-27 02:45",
-    "home": "國際米蘭",
-    "away": "阿特蘭大",
     "htScore": "1:0",
     "ftScore": "2:0",
     "status": "完場"
