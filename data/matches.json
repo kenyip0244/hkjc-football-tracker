@@ -1,5 +1,38 @@
 [
   {
+    "code": "FB11251",
+    "league": "英格蘭超級聯賽",
+    "datetime": "2026-11-25 03:00",
+    "dateStr": "2026-11-25",
+    "home": "阿仙奴",
+    "away": "高雲地利",
+    "htScore": "2:0",
+    "ftScore": "3:0",
+    "status": "完場"
+  },
+  {
+    "code": "FB11252",
+    "league": "瑞典超級聯賽",
+    "datetime": "2026-11-25 01:00",
+    "dateStr": "2026-11-25",
+    "home": "天狼星",
+    "away": "赫根",
+    "htScore": "0:1",
+    "ftScore": "1:2",
+    "status": "完場"
+  },
+  {
+    "code": "FB11253",
+    "league": "沙特超級聯賽",
+    "datetime": "2026-11-25 00:00",
+    "dateStr": "2026-11-25",
+    "home": "艾利雅德",
+    "away": "艾納斯",
+    "htScore": "0:2",
+    "ftScore": "1:4",
+    "status": "完場"
+  },
+  {
     "code": "FB11241",
     "league": "英格蘭超級聯賽",
     "datetime": "2026-11-24 03:00",
@@ -3252,36 +3285,6 @@
     "away": "般尼茅夫",
     "htScore": "2:0",
     "ftScore": "4:1",
-    "status": "完場"
-  },
-  {
-    "code": "FB3142",
-    "league": "西班牙甲組聯賽",
-    "datetime": "2026-08-17 03:30",
-    "home": "皇家馬德里",
-    "away": "維拉利爾",
-    "htScore": "1:0",
-    "ftScore": "3:0",
-    "status": "完場"
-  },
-  {
-    "code": "FB3150",
-    "league": "德國甲組聯賽",
-    "datetime": "2026-08-15 21:30",
-    "home": "拜仁慕尼黑",
-    "away": "史特加",
-    "htScore": "2:0",
-    "ftScore": "3:1",
-    "status": "完場"
-  },
-  {
-    "code": "FB3010",
-    "league": "歐洲聯賽冠軍盃",
-    "datetime": "2026-08-12 03:00",
-    "home": "些路迪",
-    "away": "卡拉伯克",
-    "htScore": "1:0",
-    "ftScore": "2:0",
     "status": "完場"
   }
 ]
